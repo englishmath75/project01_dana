@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>랜덤 자리 배치 시스템</title>
+    <title>랜덤 자리배치</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -189,11 +189,11 @@
     <div class="container">
         <div class="controls">
             <div class="input-group">
-                <label>가로 (열)</label>
+                <label>가로(열)</label>
                 <input type="number" id="cols" value="6" min="1">
             </div>
             <div class="input-group">
-                <label>세로 (행)</label>
+                <label>세로(행)</label>
                 <input type="number" id="rows" value="5" min="1">
             </div>
             <button class="btn-create" onclick="createGrid()">책상 배치 만들기</button>
@@ -202,7 +202,7 @@
 
             <div class="input-group" style="width: 100%;">
                 <label>학생 명단 (콤마나 엔터로 구분)</label>
-                <textarea id="studentNames" placeholder="예: 김철수, 이영희, 박민수...">김철수, 이영희, 박민수, 최지우, 정수현, 강동원, 유재석, 아이유, 카리나, 윈터</textarea>
+                <textarea id="studentNames" placeholder="예: 박영수, 박주연, 홍지혜...">박영수, 박주연, 홍지혜, 백광일, 구태영, 서민영</textarea>
                 <p class="info-text">💡 팁: 제외할 학생은 명단에서 지우고, 사용하지 않을 책상은 아래에서 클릭해서 끄세요(X).</p>
             </div>
 
