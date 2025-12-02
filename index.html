@@ -1,337 +1,3948 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>랜덤 자리배치</title>
-    <style>
-        :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #e0e0e0;
-            --accent-color: #bb86fc;
-            --secondary-color: #03dac6;
-            --disabled-color: #333333;
-        }
-
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>똥테트리스 게임</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <style>
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            box-sizing: border-box;
             margin: 0;
             padding: 20px;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            min-height: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: flex-start;
+            padding-top: 50px;
+            color: white;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        
+        html {
+            height: 100%;
         }
 
-        h1 {
-            color: var(--accent-color);
-            margin-bottom: 20px;
-            font-weight: 700;
+        body::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.03) 2px,
+                    rgba(255, 255, 255, 0.03) 4px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.03) 2px,
+                    rgba(255, 255, 255, 0.03) 4px
+                );
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
         }
 
-        .container {
-            width: 100%;
-            max-width: 1000px;
-            display: flex;
+        @keyframes gridMove {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        .floating-poop {
+            position: fixed;
+            font-size: 3rem;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-poop:nth-child(1) {
+            animation: floatingPoop1 12s ease-in-out infinite;
+        }
+
+        .floating-poop:nth-child(2) {
+            animation: floatingPoop2 15s ease-in-out infinite 2s;
+        }
+
+        .floating-poop:nth-child(3) {
+            animation: floatingPoop3 18s ease-in-out infinite 4s;
+        }
+
+        .floating-poop:nth-child(4) {
+            animation: floatingPoop4 14s ease-in-out infinite 1s;
+        }
+
+        .floating-poop:nth-child(5) {
+            animation: floatingPoop5 16s ease-in-out infinite 3s;
+        }
+
+        .floating-poop:nth-child(6) {
+            animation: floatingPoop6 13s ease-in-out infinite 5s;
+        }
+
+        @keyframes floatingPoop1 {
+            0%, 100% {
+                top: -10%;
+                left: 10%;
+                transform: rotate(0deg);
+            }
+            25% {
+                top: 30%;
+                left: 85%;
+                transform: rotate(90deg);
+            }
+            50% {
+                top: 75%;
+                left: 70%;
+                transform: rotate(180deg);
+            }
+            75% {
+                top: 45%;
+                left: 15%;
+                transform: rotate(270deg);
+            }
+        }
+
+        @keyframes floatingPoop2 {
+            0%, 100% {
+                top: 50%;
+                left: 90%;
+                transform: rotate(45deg);
+            }
+            33% {
+                top: 10%;
+                left: 40%;
+                transform: rotate(135deg);
+            }
+            66% {
+                top: 80%;
+                left: 20%;
+                transform: rotate(225deg);
+            }
+        }
+
+        @keyframes floatingPoop3 {
+            0%, 100% {
+                top: 80%;
+                left: 80%;
+                transform: rotate(90deg);
+            }
+            50% {
+                top: 20%;
+                left: 20%;
+                transform: rotate(270deg);
+            }
+        }
+
+        @keyframes floatingPoop4 {
+            0%, 100% {
+                top: 20%;
+                left: 5%;
+                transform: rotate(180deg);
+            }
+            25% {
+                top: 60%;
+                left: 50%;
+                transform: rotate(270deg);
+            }
+            50% {
+                top: 90%;
+                left: 90%;
+                transform: rotate(0deg);
+            }
+            75% {
+                top: 40%;
+                left: 75%;
+                transform: rotate(90deg);
+            }
+        }
+
+        @keyframes floatingPoop5 {
+            0%, 100% {
+                top: 35%;
+                left: 95%;
+                transform: rotate(315deg);
+            }
+            50% {
+                top: 65%;
+                left: 5%;
+                transform: rotate(135deg);
+            }
+        }
+
+        @keyframes floatingPoop6 {
+            0%, 100% {
+                top: 90%;
+                left: 30%;
+                transform: rotate(225deg);
+            }
+            33% {
+                top: 15%;
+                left: 70%;
+                transform: rotate(315deg);
+            }
+            66% {
+                top: 55%;
+                left: 45%;
+                transform: rotate(45deg);
+            }
+        }
+
+        .game-container {
+            display: none;
             flex-direction: column;
+            align-items: center;
             gap: 20px;
+            max-width: 400px;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .game-header {
+            text-align: center;
+        }
+
+        .game-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(90deg, 
+                #b0f4e6 0%, 
+                #ffb3d9 33%, 
+                #fff9b0 66%, 
+                #b3e5fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbowShift 3s linear infinite;
+            background-size: 200% 100%;
+        }
+
+        @keyframes rainbowShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+
+        .score-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 1.1rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .score-info > div {
+            white-space: nowrap;
+        }
+
+        .next-piece-container {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .next-piece-label {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 5px;
+        }
+
+        .pause-btn {
+            background: linear-gradient(145deg, #ffa500 0%, #ff8c00 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.4);
+        }
+
+        .pause-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 165, 0, 0.6);
+        }
+
+        .pause-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 500;
+            border-radius: 5px;
+            backdrop-filter: blur(5px);
+        }
+
+        .pause-overlay.active {
+            display: flex;
+        }
+
+        .pause-text {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #667eea;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        #next-piece-canvas {
+            display: block;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            margin: 0 auto;
+        }
+
+        .game-board {
+            background: rgba(0,0,0,0.8);
+            border: 3px solid #fff;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        #tetris-canvas {
+            display: block;
+            background: #000;
+            border-radius: 5px;
+            background-image: 
+                linear-gradient(45deg, #111 25%, transparent 25%), 
+                linear-gradient(-45deg, #111 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #111 75%), 
+                linear-gradient(-45deg, transparent 75%, #111 75%);
+            background-size: 60px 60px;
+            background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
         }
 
         .controls {
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
+            width: 100%;
+            max-width: 350px;
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        .input-group {
+        .center-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .control-btn {
+            width: 70px;
+            height: 70px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(79, 172, 254, 0.4);
+        }
+
+        .rotate-btn {
+            background: linear-gradient(145deg, #ff6b6b 0%, #ee5a24 100%);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .rotate-btn:hover {
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .rotate-btn:active {
+            box-shadow: 0 2px 10px rgba(255, 107, 107, 0.4);
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+        }
+
+        .restart-btn {
+            background: linear-gradient(145deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .start-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            text-align: center;
+            z-index: 100;
+            position: relative;
+            margin-top: 0;
+            padding-top: 0;
+        }
+
+        .small-poop {
+            position: absolute;
+            font-size: 1.2rem;
+            opacity: 0.4;
+            pointer-events: auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 200;
+        }
+
+        .small-poop:hover {
+            transform: scale(1.3);
+            opacity: 0.8;
+        }
+
+        .small-poop.collected {
+            animation: collectPoop 0.5s ease-out forwards;
+        }
+
+        @keyframes collectPoop {
+            0% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: scale(1.5) rotate(360deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .poop-counter {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(220, 38, 38, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            z-index: 9999;
+            display: none;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+
+        .poop-counter.active {
+            display: block;
+        }
+
+        .admin-star {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 9999;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        }
+
+        .admin-star:hover {
+            transform: scale(1.2) rotate(180deg);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 1);
+        }
+
+        .admin-login {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            border: 3px solid #ffd700;
+            display: none;
+            z-index: 10000;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+        }
+
+        .admin-login.active {
+            display: block;
+        }
+
+        .admin-login h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+
+        .admin-login input {
+            padding: 10px;
+            font-size: 1.2rem;
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-align: center;
+            width: 200px;
+        }
+
+        .admin-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid #ffd700;
+            display: none;
+            z-index: 10000;
+            max-height: 80%;
+            overflow-y: auto;
+            min-width: 600px;
+            max-width: 90%;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-panel h2 {
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .admin-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .admin-section h3 {
+            color: #4facfe;
+            margin-bottom: 15px;
+        }
+
+        .player-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .player-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .player-info {
             display: flex;
             flex-direction: column;
             gap: 5px;
         }
 
-        label {
-            font-size: 0.9rem;
-            color: #aaa;
-        }
-
-        input[type="number"], textarea {
-            background-color: #2c2c2c;
-            border: 1px solid #444;
+        .player-name {
+            font-size: 1.2rem;
+            font-weight: bold;
             color: white;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 1rem;
         }
 
-        textarea {
-            width: 100%;
-            height: 80px;
-            resize: vertical;
+        .player-status {
+            font-size: 0.9rem;
+            color: #4facfe;
         }
 
-        button {
-            padding: 12px 24px;
+        .player-playing {
+            color: #66ff66;
+        }
+
+        .control-player-btn {
+            background: linear-gradient(145deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
             border: none;
-            border-radius: 8px;
+            padding: 10px 20px;
+            border-radius: 15px;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
+            transition: all 0.2s ease;
         }
 
-        button:active {
-            transform: scale(0.98);
+        .control-player-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.6);
         }
 
-        .btn-create {
-            background-color: var(--secondary-color);
-            color: #000;
+        .delete-ranking-btn {
+            background: linear-gradient(145deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .btn-random {
-            background-color: var(--accent-color);
-            color: #000;
-            width: 100%;
-            font-size: 1.2rem;
+        .delete-ranking-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.6);
+        }
+
+        .player-control-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid #ff6b6b;
+            display: none;
+            z-index: 11000;
+            max-height: 80%;
+            overflow-y: auto;
+            min-width: 500px;
+            box-shadow: 0 0 50px rgba(255, 107, 107, 0.5);
+        }
+
+        .player-control-panel.active {
+            display: block;
+        }
+
+        .block-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
             margin-top: 10px;
         }
 
-        /* 교실 화면 */
-        .classroom {
-            display: grid;
-            gap: 15px;
-            margin-top: 20px;
-            width: 100%;
+        .block-option {
+            width: 60px;
+            height: 60px;
+            border: 2px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            perspective: 1000px;
+            font-size: 1.5rem;
         }
 
-        .seat {
-            background-color: var(--card-bg);
-            border: 2px solid #333;
-            border-radius: 12px;
-            height: 100px;
+        .block-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .block-option.selected {
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+
+        .admin-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .admin-input-group input {
+            padding: 10px;
+            border: 2px solid #4facfe;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .admin-btn {
+            background: linear-gradient(145deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.6);
+        }
+
+        .admin-close-btn {
+            background: linear-gradient(145deg, #ff6b6b 0%, #ee5a24 100%);
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .skill-control-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .small-poop-1 {
+            top: 8%;
+            left: 10%;
+            animation: smallFloat1 8s ease-in-out infinite;
+        }
+
+        .small-poop-2 {
+            top: 15%;
+            right: 15%;
+            animation: smallFloat2 7s ease-in-out infinite 1s;
+        }
+
+        .small-poop-3 {
+            top: 35%;
+            left: 8%;
+            animation: smallFloat3 9s ease-in-out infinite 2s;
+        }
+
+        .small-poop-4 {
+            top: 40%;
+            right: 12%;
+            animation: smallFloat4 6s ease-in-out infinite 0.5s;
+        }
+
+        .small-poop-5 {
+            top: 25%;
+            left: 5%;
+            animation: smallFloat5 7.5s ease-in-out infinite 1.5s;
+        }
+
+        .small-poop-6 {
+            top: 32%;
+            right: 8%;
+            animation: smallFloat6 8.5s ease-in-out infinite 2.5s;
+        }
+
+        @keyframes smallFloat1 {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-15px) rotate(180deg);
+            }
+        }
+
+        @keyframes smallFloat2 {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(20px) rotate(-180deg);
+            }
+        }
+
+        @keyframes smallFloat3 {
+            0%, 100% {
+                transform: translateX(0) rotate(0deg);
+            }
+            50% {
+                transform: translateX(15px) rotate(360deg);
+            }
+        }
+
+        @keyframes smallFloat4 {
+            0%, 100% {
+                transform: translateX(0) translateY(0);
+            }
+            50% {
+                transform: translateX(-10px) translateY(-10px);
+            }
+        }
+
+        @keyframes smallFloat5 {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-12px) scale(1.1);
+            }
+        }
+
+        @keyframes smallFloat6 {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(18px) rotate(180deg);
+            }
+        }
+
+        .menu-btn {
+            background: linear-gradient(145deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 200px;
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+        }
+
+        .ranking-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .ranking-list {
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 15px;
+            min-width: 300px;
+        }
+
+        .ranking-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            font-size: 1.1rem;
+        }
+
+        .ranking-item:last-child {
+            border-bottom: none;
+        }
+
+        .ranking-item.top-five {
+            border: 3px solid #ff6b6b;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(238, 90, 36, 0.1) 100%);
+            margin: 5px 0;
+            padding: 15px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .name-input-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+        }
+
+        .name-input {
+            padding: 10px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 5px;
+            margin: 15px 0;
+            width: 200px;
+            text-align: center;
+            color: #000;
+            background: #fff;
+        }
+
+        .save-status {
+            font-size: 0.9rem;
+            margin-top: 5px;
+            min-height: 20px;
+            color: #ccc;
+        }
+
+        .level-up-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 40px 60px;
+            border-radius: 20px;
+            text-align: center;
+            display: none;
+            z-index: 2000;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 3px solid #fff;
+        }
+
+        .level-up-message h1 {
+            font-size: 4rem;
+            margin: 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            animation: pulse 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes lineGlow {
+            0% {
+                opacity: 0;
+                filter: blur(10px);
+            }
+            20% {
+                opacity: 1;
+                filter: blur(5px);
+            }
+            80% {
+                opacity: 1;
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 0;
+                filter: blur(10px);
+            }
+        }
+
+        .poop-explosion {
+            position: absolute;
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 100;
+            animation: split 0.6s ease-out forwards;
+        }
+
+        @keyframes split {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0.8;
+                filter: blur(1px);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(3);
+                opacity: 0;
+                filter: blur(3px);
+            }
+        }
+
+        .golden-cross {
+            position: absolute;
+            pointer-events: none;
+            z-index: 200;
+        }
+
+        .golden-cross-vertical,
+        .golden-cross-horizontal {
+            position: absolute;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 215, 0, 0.3) 10%,
+                rgba(255, 215, 0, 0.8) 30%,
+                rgba(255, 215, 0, 1) 50%,
+                rgba(255, 215, 0, 0.8) 70%,
+                rgba(255, 215, 0, 0.3) 90%,
+                transparent 100%
+            );
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.8),
+                0 0 40px rgba(255, 215, 0, 0.6),
+                0 0 60px rgba(255, 215, 0, 0.4);
+            animation: crossGlow 0.8s ease-in-out;
+        }
+
+        .golden-cross-vertical {
+            width: 30px;
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .golden-cross-horizontal {
+            height: 30px;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(180deg, 
+                transparent 0%, 
+                rgba(255, 215, 0, 0.3) 10%,
+                rgba(255, 215, 0, 0.8) 30%,
+                rgba(255, 215, 0, 1) 50%,
+                rgba(255, 215, 0, 0.8) 70%,
+                rgba(255, 215, 0, 0.3) 90%,
+                transparent 100%
+            );
+        }
+
+        @keyframes crossGlow {
+            0% {
+                opacity: 0;
+                filter: blur(10px);
+            }
+            20% {
+                opacity: 1;
+                filter: blur(5px);
+            }
+            80% {
+                opacity: 1;
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 0;
+                filter: blur(10px);
+            }
+        }
+
+        .card-selection-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .card-selection-overlay.active {
+            display: flex;
+        }
+
+        .card-container {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .card {
+            width: 150px;
+            height: 220px;
+            background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+            border: 3px solid #fff;
+            border-radius: 15px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            position: relative;
             transition: all 0.3s ease;
-            user-select: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
         }
 
-        .seat:hover {
-            border-color: var(--secondary-color);
-            transform: translateY(-2px);
-        }
-
-        .seat.disabled {
-            background-color: #1a1a1a;
-            border-color: #222;
-            opacity: 0.5;
-            cursor: default;
-        }
-
-        .seat.disabled::after {
-            content: "X";
-            font-size: 2rem;
-            color: #444;
-            position: absolute;
-        }
-
-        .seat-number {
-            font-size: 0.8rem;
-            color: var(--secondary-color);
-            position: absolute;
-            top: 8px;
-            left: 10px;
+        .card::before {
+            content: '?';
+            font-size: 5rem;
             font-weight: bold;
+            color: rgba(255, 255, 255, 0.3);
+            position: absolute;
         }
 
-        .student-name {
+        .card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.3);
+        }
+
+        .card-title {
             font-size: 1.2rem;
             font-weight: bold;
             color: white;
-            text-align: center;
-            word-break: keep-all;
+            margin-top: 10px;
+            z-index: 1;
         }
 
-        .info-text {
-            color: #888;
+        .card-result {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px 60px;
+            border-radius: 20px;
+            text-align: center;
+            display: none;
+            z-index: 4000;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 3px solid #667eea;
+        }
+
+        .card-result.active {
+            display: block;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .card-result-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .card-result-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .block-edit-mode {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(145deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: none;
+            z-index: 3500;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.6);
+            text-align: center;
+        }
+
+        .block-edit-mode.active {
+            display: block;
+            animation: bounce 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes bounce {
+            from {
+                transform: translateX(-50%) translateY(0);
+            }
+            to {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        .combo-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(145deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            display: none;
+            z-index: 3500;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+            border: 3px solid white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .combo-message.active {
+            display: block;
+            animation: comboPopIn 0.3s ease-out;
+        }
+
+        @keyframes comboPopIn {
+            0% {
+                transform: translateX(-50%) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: translateX(-50%) scale(1.1);
+            }
+            100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .shop-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .shop-item-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .shop-item-icon {
+            font-size: 1.8rem;
+        }
+
+        .shop-item-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .shop-item-desc {
             font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .shop-item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .shop-item-price {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .shop-item-count {
+            text-align: right;
+            font-size: 0.9rem;
+            color: #4facfe;
+        }
+
+        .buy-btn {
+            background: linear-gradient(145deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .buy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .buy-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .skill-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .skill-btn {
+            position: relative;
+            background: linear-gradient(145deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 100px;
+        }
+
+        .skill-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+        }
+
+        .skill-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .skill-btn.active {
+            background: linear-gradient(145deg, #e74c3c 0%, #c0392b 100%);
+            animation: skillPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes skillPulse {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(231, 76, 60, 0.8);
+            }
+        }
+
+        .skill-icon {
+            font-size: 1.5rem;
+            margin-bottom: 3px;
+        }
+
+        .skill-name {
+            font-size: 0.75rem;
+        }
+
+        .skill-count-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+
+        .line-delete-mode {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(145deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: none;
+            z-index: 3500;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.6);
             text-align: center;
-            margin-top: 5px;
         }
-        
-        .divider {
+
+        .line-delete-mode.active {
+            display: block;
+            animation: bounce 1s ease-in-out infinite alternate;
+        }
+
+        .mini-admin-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #9b59b6;
+            display: none;
+            z-index: 5000;
+            max-width: 300px;
+            box-shadow: 0 0 30px rgba(155, 89, 182, 0.5);
+        }
+
+        .mini-admin-panel.active {
+            display: block;
+        }
+
+        .mini-admin-panel h3 {
+            color: #9b59b6;
+            text-align: center;
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+        }
+
+        .mini-admin-panel .block-selector {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .mini-admin-panel .block-option {
+            width: 50px;
+            height: 50px;
+            font-size: 1.3rem;
+        }
+
+        .mini-admin-panel .skill-control-group {
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .mini-admin-panel .admin-btn {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        .game-paused-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 1px;
-            background-color: #333;
-            margin: 10px 0;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            z-index: 4500;
         }
 
+        .game-paused-overlay.active {
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .game-title {
+                font-size: 1.8rem;
+            }
+
+            .score-info {
+                font-size: 0.9rem;
+                gap: 5px;
+            }
+            
+            .control-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.3rem;
+            }
+
+            .level-up-message h1 {
+                font-size: 3rem;
+            }
+
+            .level-up-message {
+                padding: 30px 40px;
+            }
+
+            .skill-btn {
+                min-width: 90px;
+                padding: 8px 12px;
+            }
+
+            .skill-icon {
+                font-size: 1.3rem;
+            }
+
+            .admin-panel {
+                min-width: 90%;
+                padding: 20px;
+            }
+
+            .player-control-panel {
+                min-width: 90%;
+            }
+        }
     </style>
-</head>
-<body>
-
-    <h1 style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-    <img src="school_logo.png" alt="학교 로고" style="height: 40px;">
-    랜덤 자리 배치기
-</h1>
-
-    <div class="container">
-        <div class="controls">
-            <div class="input-group">
-                <label>가로(열)</label>
-                <input type="number" id="cols" value="5" min="1">
-            </div>
-            <div class="input-group">
-                <label>세로(행)</label>
-                <input type="number" id="rows" value="6" min="1">
-            </div>
-            <button class="btn-create" onclick="createGrid()">책상 배치 만들기</button>
-            
-            <div class="divider"></div>
-
-            <div class="input-group" style="width: 100%;">
-                <label>학생 명단 (콤마나 엔터로 구분)</label>
-                <textarea id="studentNames" placeholder="예: 박영수, 박주연, 홍지혜...">박영수, 박주연, 홍지혜, 백광일, 구태영, 서민영, 이영춘, 위광현, 이진우, 임영기, 전인호, 최수형</textarea>
-                <p class="info-text">💡 팁: 제외할 학생은 명단에서 지우고, 사용하지 않을 책상은 아래에서 클릭해서 끄세요(X).</p>
-            </div>
-
-            <button class="btn-random" onclick="startRandom()">🎲 자리 추첨 시작!</button>
-        </div>
-
-        <div id="classroom" class="classroom"></div>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="floating-poop">
+   💩
+  </div>
+  <div class="floating-poop">
+   💩
+  </div>
+  <div class="floating-poop">
+   💩
+  </div>
+  <div class="floating-poop">
+   💩
+  </div>
+  <div class="floating-poop">
+   💩
+  </div>
+  <div class="floating-poop">
+   💩
+  </div>
+  <div class="poop-counter" id="poop-counter"><span id="collected-count">0</span> / 6
+  </div>
+  <div class="admin-star" id="admin-star" onclick="showAdminLogin()">
+   ⭐
+  </div>
+  <div class="admin-login" id="admin-login">
+   <h2>🔐 관리자 로그인</h2><input type="password" id="admin-password" placeholder="암호를 입력하세요" maxlength="4"> <br><button class="admin-btn" onclick="checkAdminPassword()">확인</button> <button class="admin-btn admin-close-btn" onclick="closeAdminLogin()">취소</button>
+  </div>
+  <div class="admin-panel" id="admin-panel">
+   <h2>⚙️ 관리자 패널</h2>
+   <div class="admin-section">
+    <h3>🏆 전체 랭킹 관리</h3>
+    <div class="player-list" id="ranking-management-list">
+     <p style="text-align: center; color: #ccc;">랭킹이 없습니다</p>
     </div>
+   </div>
+   <div class="admin-section">
+    <h3>👥 현재 플레이 중인 사용자</h3>
+    <div class="player-list" id="player-list">
+     <p style="text-align: center; color: #ccc;">플레이 중인 사용자가 없습니다</p>
+    </div><button class="admin-btn" onclick="controlMyself()" style="width: 100%; margin-top: 15px; background: linear-gradient(145deg, #9b59b6 0%, #8e44ad 100%);"> 🎮 자기 자신 제어하기 </button>
+   </div>
+   <div class="admin-section">
+    <h3>➕ 랭킹 추가</h3>
+    <div class="admin-input-group"><input type="text" id="admin-rank-name" placeholder="이름" maxlength="10"> <input type="number" id="admin-rank-score" placeholder="점수" min="0"> <input type="number" id="admin-rank-level" placeholder="레벨" min="1"> <button class="admin-btn" onclick="adminAddRanking()">랭킹 추가하기</button>
+    </div>
+   </div><button class="admin-btn admin-close-btn" onclick="closeAdminPanel()">닫기</button>
+  </div>
+  <div class="player-control-panel" id="player-control-panel">
+   <h2 style="color: #ff6b6b; text-align: center; margin-bottom: 20px;">🎮 <span id="control-player-name"></span> 제어하기</h2>
+   <div class="admin-section">
+    <h3>🎲 다다음 블록 변경</h3>
+    <p style="font-size: 0.9rem; color: #ccc;">선택한 블록이 플레이어의 다다음 블록으로 설정됩니다</p>
+    <div class="block-selector">
+     <div class="block-option" style="background: linear-gradient(145deg, #00d4ff, #00a8cc);" onclick="setPlayerNextPiece(0)"><span>I</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #ffff66, #cccc00);" onclick="setPlayerNextPiece(1)"><span>O</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #b84dff, #7700cc);" onclick="setPlayerNextPiece(2)"><span>T</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #66ff66, #00cc00);" onclick="setPlayerNextPiece(3)"><span>S</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #ff6666, #cc0000);" onclick="setPlayerNextPiece(4)"><span>Z</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #6666ff, #0000cc);" onclick="setPlayerNextPiece(5)"><span>J</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #ff9933, #cc6600);" onclick="setPlayerNextPiece(6)"><span>L</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #ffd700, #ffaa00); box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);" onclick="setPlayerNextPiece(7)"><span>💩</span>
+     </div>
+    </div>
+   </div>
+   <div class="admin-section">
+    <h3>🎁 스킬 지급</h3>
+    <p style="font-size: 0.9rem; color: #ccc;">플레이어에게 스킬을 지급합니다</p>
+    <div class="skill-control-group"><button class="admin-btn" onclick="givePlayerSkill(1, 1)">✂️ 한줄 지우기 +1</button> <button class="admin-btn" onclick="givePlayerSkill(2, 1)">💣 폭��� +1</button> <button class="admin-btn" onclick="givePlayerSkill(3, 1)">⏱️ 시간 느리게 +1</button>
+    </div><button class="admin-btn" onclick="givePlayerAllSkills()" style="width: 100%; margin-top: 10px;">🎁 모든 스킬 +5</button>
+   </div>
+   <div class="admin-section">
+    <h3>📊 랭킹 직접 수정</h3>
+    <div class="admin-input-group"><input type="number" id="player-rank-score" placeholder="새로운 점수" min="0"> <input type="number" id="player-rank-level" placeholder="새로운 레벨" min="1"> <button class="admin-btn" onclick="updatePlayerRanking()">랭킹 수정하기</button>
+    </div>
+   </div><button class="admin-btn admin-close-btn" onclick="closePlayerControlPanel()">닫기</button>
+  </div>
+  <div class="start-screen" id="nickname-screen">
+   <h1 class="game-title">승찬의 똥 테트리스</h1>
+   <p style="font-size: 1.2rem; margin: 20px 0;">닉네임을 입력하세요</p><input type="text" class="name-input" id="nickname-input" placeholder="닉네임을 입력하세요" maxlength="10" style="margin: 20px 0;"> <button class="menu-btn" onclick="setNickname()">확인</button>
+  </div>
+  <div class="start-screen" id="start-screen" style="display: none;">
+   <div class="small-poop small-poop-1" onclick="collectSmallPoop(this)">
+    💩
+   </div>
+   <div class="small-poop small-poop-2" onclick="collectSmallPoop(this)">
+    💩
+   </div>
+   <div class="small-poop small-poop-3" onclick="collectSmallPoop(this)">
+    💩
+   </div>
+   <div class="small-poop small-poop-4" onclick="collectSmallPoop(this)">
+    💩
+   </div>
+   <div class="small-poop small-poop-5" onclick="collectSmallPoop(this)">
+    💩
+   </div>
+   <div class="small-poop small-poop-6" onclick="collectSmallPoop(this)">
+    💩
+   </div>
+   <h1 class="game-title">승찬의 똥 테트리스</h1>
+   <p style="font-size: 1.1rem; margin: 10px 0;">환영합니다, <span id="welcome-nickname" style="color: #ffd700; font-weight: bold;"></span>님!</p><button class="menu-btn" onclick="startGame()">🎮 게임 시작</button> <button class="menu-btn" onclick="showRanking()">🏆 랭킹 보기</button> <button class="menu-btn" id="shop-button" onclick="showShop()" style="display: none;">🛒 상���</button> <button class="menu-btn" id="hidden-quest-button" onclick="showHiddenQuest()" style="background: linear-gradient(145deg, #9b59b6 0%, #8e44ad 100%);">🔮 히든 퀘스트</button>
+  </div>
+  <div class="ranking-screen" id="ranking-screen">
+   <h2>🏆 랭킹</h2>
+   <div class="ranking-list" id="ranking-list">
+    <div class="ranking-item"><span>아직 기록이 없습니다</span>
+    </div>
+   </div><button class="menu-btn" onclick="showStartScreen()">메인으로</button>
+  </div>
+  <div class="ranking-screen" id="hidden-quest-screen">
+   <h2>🔮 히든 퀘스트</h2>
+   <div class="ranking-list" style="max-width: 500px; min-height: 150px; font-size: 1.3rem; line-height: 1.8;">
+    <div id="hidden-quest-text" style="padding: 20px;"></div>
+   </div><button class="menu-btn" onclick="showStartScreen()">메인으로</button>
+  </div>
+  <div class="ranking-screen" id="shop-screen">
+   <h2>🛒 상점</h2>
+   <div style="font-size: 1.2rem; margin-bottom: 20px;">
+    보물 열쇠: <span id="shop-keys" style="color: #ffd700; font-weight: bold;">0</span>개
+   </div>
+   <div class="ranking-list" style="max-width: 400px;">
+    <div class="shop-item">
+     <div class="shop-item-header">
+      <div class="shop-item-icon">
+       ✂️
+      </div>
+      <div class="shop-item-name">
+       한줄 지우기
+      </div>
+     </div>
+     <div class="shop-item-desc">
+      가로줄이나 세로줄을 선택하여 한 번에 삭제할 수 있습니다. 삭제할 줄의 양 끝을 클릭하세요.
+     </div>
+     <div class="shop-item-footer">
+      <div class="shop-item-price">
+       🔑 1개
+      </div><button class="buy-btn" onclick="buySkill(1, 1)">구매하기</button>
+     </div>
+     <div class="shop-item-count">
+      보유 중: <span id="skill1-count">0</span>개
+     </div>
+    </div>
+    <div class="shop-item">
+     <div class="shop-item-header">
+      <div class="shop-item-icon">
+       💣
+      </div>
+      <div class="shop-item-name">
+       폭탄
+      </div>
+     </div>
+     <div class="shop-item-desc">
+      다음 블록을 폭탄으로 변환합니다. 착지 시 반경 3칸의 모든 블록을 폭파시킵니다.
+     </div>
+     <div class="shop-item-footer">
+      <div class="shop-item-price">
+       🔑 1개
+      </div><button class="buy-btn" onclick="buySkill(2, 1)">구매하기</button>
+     </div>
+     <div class="shop-item-count">
+      보유 중: <span id="skill2-count">0</span>개
+     </div>
+    </div>
+    <div class="shop-item">
+     <div class="shop-item-header">
+      <div class="shop-item-icon">
+       ⏱️
+      </div>
+      <div class="shop-item-name">
+       시간 느리게
+      </div>
+     </div>
+     <div class="shop-item-desc">
+      현재 레벨이 끝날 때까지 모든 블록의 낙하 속도를 레벨 1로 느리게 만듭니다.
+     </div>
+     <div class="shop-item-footer">
+      <div class="shop-item-price">
+       🔑 1개
+      </div><button class="buy-btn" onclick="buySkill(3, 1)">구매하기</button>
+     </div>
+     <div class="shop-item-count">
+      보유 중: <span id="skill3-count">0</span>개
+     </div>
+    </div>
+   </div><button class="menu-btn" onclick="showStartScreen()">메인으로</button>
+  </div>
+  <div class="game-container" id="game-container">
+   <div class="game-header">
+    <h1 class="game-title">승찬의 똥 테트리스</h1>
+    <div class="score-info">
+     <div>
+      점수: <span id="score">0</span>
+     </div>
+     <div>
+      레벨: <span id="level">1</span>
+     </div>
+     <div>
+      열쇠: <span id="keys">0</span>🔑
+     </div>
+     <div>
+      라인: <span id="lines">0</span>/<span id="target">5</span>
+     </div>
+    </div>
+    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;"><button class="pause-btn" id="pause-btn" onclick="togglePause()">⏸️ 정지</button> <button class="pause-btn" id="drop-btn" onclick="hardDrop()" style="background: linear-gradient(145deg, #ff6b6b 0%, #ee5a24 100%);">⬇️ 낙하</button>
+    </div>
+    <div class="next-piece-container">
+     <div class="next-piece-label">
+      다음 블록
+     </div>
+     <canvas id="next-piece-canvas" width="120" height="120"></canvas>
+    </div>
+   </div>
+   <div class="game-board" id="game-board">
+    <canvas id="tetris-canvas" width="300" height="600"></canvas>
+    <div class="pause-overlay" id="pause-overlay">
+     <div class="pause-text">
+      일시정지
+     </div>
+    </div>
+   </div>
+   <div class="controls"><button class="control-btn" id="left-btn">←</button>
+    <div class="center-controls"><button class="control-btn rotate-btn" id="rotate-btn">↻</button> <button class="control-btn" id="down-btn">↓</button>
+    </div><button class="control-btn" id="right-btn">→</button>
+   </div>
+   <div class="skill-buttons" id="skill-buttons" style="display: none; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 15px; max-width: 350px;"><button class="skill-btn" id="skill1-btn" onclick="activateSkill(1)">
+     <div class="skill-icon">
+      ✂️
+     </div>
+     <div class="skill-name">
+      한줄 지우기
+     </div>
+     <div class="skill-count-badge" id="skill1-badge">
+      0
+     </div></button> <button class="skill-btn" id="skill2-btn" onclick="activateSkill(2)">
+     <div class="skill-icon">
+      💣
+     </div>
+     <div class="skill-name">
+      폭탄
+     </div>
+     <div class="skill-count-badge" id="skill2-badge">
+      0
+     </div></button> <button class="skill-btn" id="skill3-btn" onclick="activateSkill(3)">
+     <div class="skill-icon">
+      ⏱️
+     </div>
+     <div class="skill-name">
+      시간 느��게
+     </div>
+     <div class="skill-count-badge" id="skill3-badge">
+      0
+     </div></button>
+   </div>
+  </div>
+  <div class="game-over" id="game-over">
+   <h2>게임 오버!</h2>
+   <p>최종 점수: <span id="final-score">0</span></p>
+   <p id="rank-message" style="display: none; color: #4facfe; font-weight: bold; margin: 15px 0;"></p>
+   <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;"><button class="restart-btn" onclick="restartGame()">다시 시작</button> <button class="restart-btn" onclick="showStartScreen()">메인으로</button> <button class="restart-btn" id="name-input-btn" onclick="showNameInput()" style="display: none;">이름 입력</button>
+   </div>
+  </div>
+  <div class="name-input-screen" id="name-input-screen">
+   <h2><span id="rank-position"></span> 달성!</h2>
+   <p>축하합니다! TOP 5에 진입하셨습니다!</p>
+   <p>점수: <span id="rank-score">0</span></p><input type="text" class="name-input" id="player-name" placeholder="저장할 이름을 입력하세요" maxlength="10">
+   <div class="save-status" id="save-status"></div><br>
+   <div style="display: flex; gap: 10px; justify-content: center;"><button class="restart-btn" id="save-btn" onclick="saveScore()">저장하기</button> <button class="restart-btn" id="back-to-main-btn" onclick="backToMainFromSave()" style="display: none;">메인으로</button> <button class="restart-btn" id="retry-btn" style="display: none;">다시 시도</button>
+   </div>
+  </div>
+  <div class="level-up-message" id="level-up-message">
+   <h1 id="level-up-text">레벨 2</h1>
+  </div>
+  <div class="card-selection-overlay" id="card-selection-overlay">
+   <div class="card-container">
+    <div class="card" onclick="selectCard('left')">
+     <div class="card-title">
+      왼쪽 카드
+     </div>
+    </div>
+    <div class="card" onclick="selectCard('right')">
+     <div class="card-title">
+      오��쪽 카드
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="card-result" id="card-result">
+   <div class="card-result-icon" id="card-result-icon"></div>
+   <div class="card-result-text" id="card-result-text"></div><button class="restart-btn" onclick="closeCardResult()">확인</button>
+  </div>
+  <div class="block-edit-mode" id="block-edit-mode">
+   블록 추가/삭제 모드 (남은 횟수: <span id="edit-count">5</span>)
+  </div>
+  <div class="combo-message" id="combo-message">
+   콤보 <span id="combo-count">2</span>!
+  </div>
+  <div class="line-delete-mode" id="line-delete-mode">
+   ✂️ 한줄 지우기 모드<br><span style="font-size: 0.9rem;">삭��할 줄의 양 끝을 클릭하세��</span>
+  </div>
+  <div class="game-paused-overlay" id="game-paused-overlay"></div>
+  <div class="mini-admin-panel" id="mini-admin-panel">
+   <h3>🎮 자기 제어</h3>
+   <div style="margin-bottom: 15px;">
+    <p style="font-size: 0.85rem; color: #ccc; margin: 0 0 8px 0;">다다음 블록 변경</p>
+    <div class="block-selector">
+     <div class="block-option" style="background: linear-gradient(145deg, #00d4ff, #00a8cc);" onclick="setMyselfNextPiece(0)"><span>I</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #ffff66, #cccc00);" onclick="setMyselfNextPiece(1)"><span>O</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #b84dff, #7700cc);" onclick="setMyselfNextPiece(2)"><span>T</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #66ff66, #00cc00);" onclick="setMyselfNextPiece(3)"><span>S</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #ff6666, #cc0000);" onclick="setMyselfNextPiece(4)"><span>Z</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #6666ff, #0000cc);" onclick="setMyselfNextPiece(5)"><span>J</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #ff9933, #cc6600);" onclick="setMyselfNextPiece(6)"><span>L</span>
+     </div>
+     <div class="block-option" style="background: linear-gradient(145deg, #ffd700, #ffaa00); box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);" onclick="setMyselfNextPiece(7)"><span>💩</span>
+     </div>
+    </div>
+   </div>
+   <div>
+    <p style="font-size: 0.85rem; color: #ccc; margin: 0 0 8px 0;">스킬 지급</p>
+    <div class="skill-control-group"><button class="admin-btn" onclick="giveMyselfSkill(1, 1)">✂️ +1</button> <button class="admin-btn" onclick="giveMyselfSkill(2, 1)">💣 +1</button> <button class="admin-btn" onclick="giveMyselfSkill(3, 1)">⏱️ +1</button>
+    </div>
+   </div><button class="admin-btn" onclick="closeMiniAdminPanel()" style="width: 100%; background: linear-gradient(145deg, #ff6b6b 0%, #ee5a24 100%);"> ✕ 닫기 </button>
+  </div>
+  <script>
+        const canvas = document.getElementById('tetris-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        const dpr = window.devicePixelRatio || 1;
+        const BLOCK_SIZE = 25;
+        const BOARD_WIDTH = 10;
+        const BOARD_HEIGHT = 20;
+        
+        canvas.width = BOARD_WIDTH * BLOCK_SIZE * dpr;
+        canvas.height = BOARD_HEIGHT * BLOCK_SIZE * dpr;
+        canvas.style.width = (BOARD_WIDTH * BLOCK_SIZE) + 'px';
+        canvas.style.height = (BOARD_HEIGHT * BLOCK_SIZE) + 'px';
+        ctx.scale(dpr, dpr);
 
-    <script>
-        let isAnimating = false;
+        let board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
+        let score = 0;
+        let level = 1;
+        let lines = 0;
+        let targetLines = 5;
+        let dropTime = 0;
+        let lastTime = 0;
+        let gameRunning = false;
+        let gamePaused = false;
+        let rankings = [];
+        let activePlayers = [];
+        let rarePoopPosition = null;
+        let editMode = false;
+        let editCount = 0;
+        let comboCount = 0;
+        let lastClearTime = 0;
+        let hardDropUsed = false;
+        let collectedPoops = 0;
+        let skill1Count = 0;
+        let skill2Count = 0;
+        let skill3Count = 0;
+        let activeSkill = 0;
+        let lineDeleteClicks = [];
+        let slowMotionActive = false;
+        let bombActive = false;
+        let keyCount = 0;
+        let hiddenQuestViewed = false;
+        let typingInterval = null;
+        let sdkInitialized = false;
+        let easterEgg1Used = false;
+        let easterEgg2Used = false;
+        let myPlayerId = null;
+        let myNickname = '';
+        let currentControlPlayerId = null;
 
-        // 1. 초기 그리드 생성
-        function createGrid() {
-            const cols = document.getElementById('cols').value;
-            const rows = document.getElementById('rows').value;
-            const classroom = document.getElementById('classroom');
-            
-            classroom.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-            classroom.innerHTML = ''; // 기존 내용 초기화
-
-            for (let i = 0; i < cols * rows; i++) {
-                const seat = document.createElement('div');
-                seat.className = 'seat';
-                seat.dataset.index = i;
+        const dataHandler = {
+            onDataChanged(data) {
+                rankings = data.filter(item => item.type === 'ranking').sort((a, b) => b.score - a.score);
+                activePlayers = data.filter(item => item.type === 'player');
                 
-                // 클릭 시 사용 불가(X) 토글
-                seat.onclick = function() {
-                    if(!isAnimating) {
-                        this.classList.toggle('disabled');
+                updateRankingDisplay();
+                updateRankingManagementList();
+                updatePlayerList();
+                
+                if (myPlayerId) {
+                    const myData = activePlayers.find(p => p.__backendId === myPlayerId);
+                    if (myData && gameRunning) {
+                        if (myData.next_next_piece !== undefined && myData.next_next_piece !== null) {
+                            applyAdminNextPieceOverride(myData.next_next_piece);
+                            updatePlayerData({ next_next_piece: null });
+                        }
+                        
+                        if (myData.skill1_count !== skill1Count || 
+                            myData.skill2_count !== skill2Count || 
+                            myData.skill3_count !== skill3Count) {
+                            skill1Count = myData.skill1_count || 0;
+                            skill2Count = myData.skill2_count || 0;
+                            skill3Count = myData.skill3_count || 0;
+                            updateSkillBadges();
+                            updateScore();
+                        }
                     }
-                };
-                
-                classroom.appendChild(seat);
-            }
-        }
-
-        // 2. 랜덤 섞기 알고리즘 (Fisher-Yates Shuffle)
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        // 3. 실행 로직
-        function startRandom() {
-            if(isAnimating) return;
-
-            const seats = document.querySelectorAll('.seat');
-            const activeSeats = [];
-            
-            // 사용 가능한(disabled가 아닌) 자리만 수집
-            seats.forEach((seat, index) => {
-                // 초기화
-                seat.querySelector('.seat-number')?.remove();
-                seat.querySelector('.student-name')?.remove();
-                
-                if (!seat.classList.contains('disabled')) {
-                    activeSeats.push(seat);
                 }
+            }
+        };
+
+        async function initializeSDK() {
+            if (window.dataSdk && !sdkInitialized) {
+                try {
+                    const result = await window.dataSdk.init(dataHandler);
+                    if (result.isOk) {
+                        sdkInitialized = true;
+                    }
+                } catch (error) {
+                    console.error("SDK initialization error:", error);
+                }
+            }
+        }
+
+        async function updatePlayerData(updates) {
+            if (!myPlayerId || !sdkInitialized) return;
+            
+            const myPlayer = activePlayers.find(p => p.__backendId === myPlayerId);
+            if (!myPlayer) return;
+            
+            const updatedPlayer = { ...myPlayer, ...updates };
+            const result = await window.dataSdk.update(updatedPlayer);
+        }
+
+        function updateRankingManagementList() {
+            const managementList = document.getElementById('ranking-management-list');
+            
+            if (rankings.length === 0) {
+                managementList.innerHTML = '<p style="text-align: center; color: #ccc;">랭킹이 없습니다</p>';
+                return;
+            }
+            
+            managementList.innerHTML = '';
+            rankings.forEach((ranking, index) => {
+                const item = document.createElement('div');
+                item.className = 'player-item';
+                
+                const info = document.createElement('div');
+                info.className = 'player-info';
+                
+                const name = document.createElement('div');
+                name.className = 'player-name';
+                name.textContent = `${index + 1}위. ${ranking.name}`;
+                
+                const scoreInfo = document.createElement('div');
+                scoreInfo.className = 'player-status';
+                scoreInfo.textContent = `점수: ${ranking.score}, 레벨: ${ranking.level}`;
+                
+                info.appendChild(name);
+                info.appendChild(scoreInfo);
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-ranking-btn';
+                deleteBtn.textContent = '삭제';
+                deleteBtn.onclick = () => deleteRanking(ranking);
+                
+                item.appendChild(info);
+                item.appendChild(deleteBtn);
+                managementList.appendChild(item);
             });
+        }
 
-            // 학생 명단 파싱
-            const rawText = document.getElementById('studentNames').value;
-            // 콤마, 줄바꿈, 공백 등을 기준으로 쪼개고 빈값 제거
-            let students = rawText.split(/[\n,]+/).map(s => s.trim()).filter(s => s.length > 0);
+        async function deleteRanking(ranking) {
+            if (!window.dataSdk || !sdkInitialized) return;
+            
+            if (!confirm(`${ranking.name}의 랭킹을 삭제하시겠습니까?`)) {
+                return;
+            }
+            
+            const result = await window.dataSdk.delete(ranking);
+            
+            if (result.isOk) {
+                showAdminMessage('랭킹이 삭제되었습니다!');
+            } else {
+                showAdminMessage('삭제 실패!');
+            }
+        }
 
-            if (students.length > activeSeats.length) {
-                alert(`자리가 부족합니다!\n학생 수: ${students.length}명\n사용 가능 자리: ${activeSeats.length}개`);
+        function updatePlayerList() {
+            const playerList = document.getElementById('player-list');
+            
+            const playingPlayers = activePlayers.filter(p => p.is_playing);
+            
+            if (playingPlayers.length === 0) {
+                playerList.innerHTML = '<p style="text-align: center; color: #ccc;">플레이 중인 사용자가 없습니다</p>';
+                return;
+            }
+            
+            playerList.innerHTML = '';
+            playingPlayers.forEach(player => {
+                const playerItem = document.createElement('div');
+                playerItem.className = 'player-item';
+                
+                const playerInfo = document.createElement('div');
+                playerInfo.className = 'player-info';
+                
+                const playerName = document.createElement('div');
+                playerName.className = 'player-name';
+                playerName.textContent = player.nickname;
+                
+                const playerStatus = document.createElement('div');
+                playerStatus.className = 'player-status player-playing';
+                playerStatus.textContent = `🎮 플레이 중 - 점수: ${player.score}, 레벨: ${player.level}`;
+                
+                playerInfo.appendChild(playerName);
+                playerInfo.appendChild(playerStatus);
+                
+                const controlBtn = document.createElement('button');
+                controlBtn.className = 'control-player-btn';
+                controlBtn.textContent = '제어하기';
+                controlBtn.onclick = () => openPlayerControl(player.__backendId);
+                
+                playerItem.appendChild(playerInfo);
+                playerItem.appendChild(controlBtn);
+                playerList.appendChild(playerItem);
+            });
+        }
+
+        function openPlayerControl(playerId) {
+            currentControlPlayerId = playerId;
+            const player = activePlayers.find(p => p.__backendId === playerId);
+            if (!player) return;
+            
+            document.getElementById('control-player-name').textContent = player.nickname;
+            document.getElementById('player-control-panel').classList.add('active');
+        }
+
+        function closePlayerControlPanel() {
+            document.getElementById('player-control-panel').classList.remove('active');
+            currentControlPlayerId = null;
+        }
+
+        function controlMyself() {
+            if (!myPlayerId) {
+                showAdminMessage('플레이어 정보를 찾을 수 없습니다!');
+                return;
+            }
+            
+            closeAdminPanel();
+            document.getElementById('mini-admin-panel').classList.add('active');
+        }
+
+        function closeMiniAdminPanel() {
+            document.getElementById('mini-admin-panel').classList.remove('active');
+        }
+
+        async function setMyselfNextPiece(pieceIndex) {
+            if (!myPlayerId) return;
+            
+            await updatePlayerData({ next_next_piece: pieceIndex });
+            showMiniAdminMessage('다다음 블록이 설정되었습니다!');
+        }
+
+        async function giveMyselfSkill(skillNum, amount) {
+            if (!myPlayerId) return;
+            
+            if (skillNum === 1) {
+                skill1Count += amount;
+            } else if (skillNum === 2) {
+                skill2Count += amount;
+            } else if (skillNum === 3) {
+                skill3Count += amount;
+            }
+            
+            updateSkillBadges();
+            updateScore();
+            await updateMyPlayerStatus(gameRunning);
+            
+            showMiniAdminMessage('스킬이 지급되었습니다!');
+        }
+
+        function showMiniAdminMessage(message) {
+            const miniMsg = document.createElement('div');
+            miniMsg.style.position = 'fixed';
+            miniMsg.style.top = '50%';
+            miniMsg.style.left = '50%';
+            miniMsg.style.transform = 'translate(-50%, -50%)';
+            miniMsg.style.background = 'rgba(155, 89, 182, 0.95)';
+            miniMsg.style.color = 'white';
+            miniMsg.style.padding = '15px 30px';
+            miniMsg.style.borderRadius = '12px';
+            miniMsg.style.fontSize = '1.1rem';
+            miniMsg.style.fontWeight = 'bold';
+            miniMsg.style.zIndex = '6000';
+            miniMsg.style.border = '2px solid white';
+            miniMsg.textContent = message;
+            
+            document.body.appendChild(miniMsg);
+            
+            setTimeout(() => {
+                miniMsg.remove();
+            }, 1000);
+        }
+
+        async function setPlayerNextPiece(pieceIndex) {
+            if (!currentControlPlayerId) return;
+            
+            const player = activePlayers.find(p => p.__backendId === currentControlPlayerId);
+            if (!player) return;
+            
+            const updatedPlayer = { ...player, next_next_piece: pieceIndex };
+            const result = await window.dataSdk.update(updatedPlayer);
+            
+            if (result.isOk) {
+                showAdminMessage(`${player.nickname}의 다다음 블록이 설정되었습니다!`);
+            }
+        }
+
+        async function givePlayerSkill(skillNum, amount) {
+            if (!currentControlPlayerId) return;
+            
+            const player = activePlayers.find(p => p.__backendId === currentControlPlayerId);
+            if (!player) return;
+            
+            const updates = {};
+            if (skillNum === 1) {
+                updates.skill1_count = (player.skill1_count || 0) + amount;
+            } else if (skillNum === 2) {
+                updates.skill2_count = (player.skill2_count || 0) + amount;
+            } else if (skillNum === 3) {
+                updates.skill3_count = (player.skill3_count || 0) + amount;
+            }
+            
+            const updatedPlayer = { ...player, ...updates };
+            const result = await window.dataSdk.update(updatedPlayer);
+            
+            if (result.isOk) {
+                showAdminMessage(`${player.nickname}에게 스킬이 지급되었습니다!`);
+            }
+        }
+
+        async function givePlayerAllSkills() {
+            if (!currentControlPlayerId) return;
+            
+            const player = activePlayers.find(p => p.__backendId === currentControlPlayerId);
+            if (!player) return;
+            
+            const updatedPlayer = { 
+                ...player, 
+                skill1_count: (player.skill1_count || 0) + 5,
+                skill2_count: (player.skill2_count || 0) + 5,
+                skill3_count: (player.skill3_count || 0) + 5
+            };
+            const result = await window.dataSdk.update(updatedPlayer);
+            
+            if (result.isOk) {
+                showAdminMessage(`${player.nickname}에게 모든 스킬 5개씩 지급되었습니다!`);
+            }
+        }
+
+        async function updatePlayerRanking() {
+            if (!currentControlPlayerId) return;
+            
+            const newScore = parseInt(document.getElementById('player-rank-score').value);
+            const newLevel = parseInt(document.getElementById('player-rank-level').value);
+            
+            if (!newScore || !newLevel) {
+                showAdminMessage('점수와 레벨을 모두 입력해주세요!');
+                return;
+            }
+            
+            const player = activePlayers.find(p => p.__backendId === currentControlPlayerId);
+            if (!player) return;
+            
+            const updatedPlayer = { 
+                ...player, 
+                score: newScore,
+                level: newLevel
+            };
+            const result = await window.dataSdk.update(updatedPlayer);
+            
+            if (result.isOk) {
+                document.getElementById('player-rank-score').value = '';
+                document.getElementById('player-rank-level').value = '';
+                showAdminMessage(`${player.nickname}의 랭킹이 수정되었습니다!`);
+            }
+        }
+
+        function applyAdminNextPieceOverride(pieceIndex) {
+            if (pieceIndex === 7) {
+                nextPiece = RARE_POOP;
+            } else if (pieceIndex >= 0 && pieceIndex < TETROMINOS.length) {
+                nextPiece = TETROMINOS[pieceIndex];
+            }
+            drawNextPiece();
+        }
+
+        const TETROMINOS = [
+            [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]],
+            [[2,2],[2,2]],
+            [[0,3,0],[3,3,3],[0,0,0]],
+            [[0,4,4],[4,4,0],[0,0,0]],
+            [[5,5,0],[0,5,5],[0,0,0]],
+            [[6,0,0],[6,6,6],[0,0,0]],
+            [[0,0,7],[7,7,7],[0,0,0]]
+        ];
+
+        const RARE_POOP = [[8]];
+
+        const COLORS = [
+            null,
+            { start: '#00d4ff', end: '#00a8cc' },
+            { start: '#ffff66', end: '#cccc00' },
+            { start: '#b84dff', end: '#7700cc' },
+            { start: '#66ff66', end: '#00cc00' },
+            { start: '#ff6666', end: '#cc0000' },
+            { start: '#6666ff', end: '#0000cc' },
+            { start: '#ff9933', end: '#cc6600' },
+            { start: '#ffd700', end: '#ffaa00' },
+            { start: '#444444', end: '#222222' }
+        ];
+
+        let glowAnimation = 0;
+
+        let currentPiece = {
+            shape: null,
+            x: 0,
+            y: 0
+        };
+        let nextPiece = null;
+
+        const nextCanvas = document.getElementById('next-piece-canvas');
+        const nextCtx = nextCanvas.getContext('2d');
+        
+        nextCanvas.width = 120 * dpr;
+        nextCanvas.height = 120 * dpr;
+        nextCanvas.style.width = '120px';
+        nextCanvas.style.height = '120px';
+        nextCtx.scale(dpr, dpr);
+
+        function setNickname() {
+            const nickname = document.getElementById('nickname-input').value.trim();
+            if (!nickname) {
+                document.getElementById('nickname-input').placeholder = '닉네임을 입력해주세요!';
+                return;
+            }
+            
+            myNickname = nickname;
+            document.getElementById('welcome-nickname').textContent = nickname;
+            document.getElementById('nickname-screen').style.display = 'none';
+            document.getElementById('start-screen').style.display = 'flex';
+            
+            registerPlayer();
+        }
+
+        async function registerPlayer() {
+            if (!sdkInitialized) {
+                await initializeSDK();
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            if (window.dataSdk) {
+                const result = await window.dataSdk.create({
+                    type: 'player',
+                    nickname: myNickname,
+                    is_playing: false,
+                    score: 0,
+                    level: 1,
+                    skill1_count: 0,
+                    skill2_count: 0,
+                    skill3_count: 0,
+                    next_next_piece: null,
+                    last_update: new Date().toISOString()
+                });
+                
+                if (result.isOk) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    const myPlayer = activePlayers.find(p => p.nickname === myNickname);
+                    if (myPlayer) {
+                        myPlayerId = myPlayer.__backendId;
+                    }
+                }
+            }
+        }
+
+        async function updateMyPlayerStatus(isPlaying) {
+            if (!myPlayerId) return;
+            
+            await updatePlayerData({
+                is_playing: isPlaying,
+                score: score,
+                level: level,
+                skill1_count: skill1Count,
+                skill2_count: skill2Count,
+                skill3_count: skill3Count,
+                last_update: new Date().toISOString()
+            });
+        }
+
+        function showAdminLogin() {
+            if (gameRunning) {
+                gamePaused = true;
+                document.getElementById('pause-overlay').classList.add('active');
+                document.getElementById('game-paused-overlay').classList.add('active');
+            }
+            
+            document.getElementById('admin-login').classList.add('active');
+            document.getElementById('admin-password').value = '';
+            
+            setTimeout(() => {
+                document.getElementById('admin-password').focus();
+            }, 100);
+        }
+
+        function closeAdminLogin() {
+            document.getElementById('admin-login').classList.remove('active');
+            document.getElementById('game-paused-overlay').classList.remove('active');
+            
+            if (gameRunning) {
+                gamePaused = false;
+                document.getElementById('pause-overlay').classList.remove('active');
+            }
+        }
+
+        function checkAdminPassword() {
+            const password = document.getElementById('admin-password').value;
+            if (password === '1123') {
+                closeAdminLogin();
+                
+                if (gameRunning) {
+                    controlMyself();
+                } else {
+                    showAdminPanel();
+                }
+            } else {
+                document.getElementById('admin-password').value = '';
+                document.getElementById('admin-password').placeholder = '암호가 틀렸습니다';
+                setTimeout(() => {
+                    document.getElementById('admin-password').placeholder = '암호를 ���력하세요';
+                }, 2000);
+            }
+        }
+
+        function showAdminPanel() {
+            document.getElementById('admin-panel').classList.add('active');
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('admin-panel').classList.remove('active');
+        }
+
+        async function adminAddRanking() {
+            const name = document.getElementById('admin-rank-name').value.trim();
+            const scoreValue = parseInt(document.getElementById('admin-rank-score').value);
+            const levelValue = document.getElementById('admin-rank-level').value;
+
+            if (!name || !scoreValue || !levelValue) {
+                showAdminMessage('모든 항목을 입력해주세요!');
                 return;
             }
 
-            // --- 핵심 로직: 2단계 랜덤 ---
+            if (!sdkInitialized) {
+                await initializeSDK();
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
 
-            // Step 1: 자리 번호 랜덤 생성
-            // 1부터 사용 가능한 자리 개수만큼 숫자를 만들고 섞음
-            let seatNumbers = Array.from({length: activeSeats.length}, (_, i) => i + 1);
-            shuffle(seatNumbers);
+            if (window.dataSdk) {
+                const result = await window.dataSdk.create({
+                    type: 'ranking',
+                    name: name,
+                    score: scoreValue,
+                    level: levelValue,
+                    date: new Date().toISOString()
+                });
 
-            // Step 2: 학생 명단 섞기
-            shuffle(students);
-
-            // 애니메이션 효과 (선택사항)
-            isAnimating = true;
-            let count = 0;
-            
-            // 시각적 효과를 위해 약간의 딜레이
-            activeSeats.forEach((seat, i) => {
-                setTimeout(() => {
-                    // 1. 랜덤한 자리 번호 부여
-                    const numberDiv = document.createElement('div');
-                    numberDiv.className = 'seat-number';
-                    numberDiv.innerText = seatNumbers[i]; // 섞인 번호 부여
-                    seat.appendChild(numberDiv);
-
-                    // 2. 랜덤한 학생 부여 (학생이 자리보다 적을 수 있음)
-                    if (i < students.length) {
-                        const nameDiv = document.createElement('div');
-                        nameDiv.className = 'student-name';
-                        nameDiv.innerText = students[i];
-                        seat.appendChild(nameDiv);
-                    } else {
-                        // 학생이 모자라면 빈자리 표시
-                        const nameDiv = document.createElement('div');
-                        nameDiv.className = 'student-name';
-                        nameDiv.style.opacity = "0.3";
-                        nameDiv.innerText = "(빈자리)";
-                        seat.appendChild(nameDiv);
-                    }
-                    
-                    // 등장 효과
-                    seat.style.transform = "scale(1.05)";
-                    setTimeout(() => seat.style.transform = "scale(1)", 200);
-
-                }, i * 50); // 순차적으로 촤라락 뜨게 함
-            });
-
-            setTimeout(() => {
-                isAnimating = false;
-            }, activeSeats.length * 50 + 200);
+                if (result.isOk) {
+                    document.getElementById('admin-rank-name').value = '';
+                    document.getElementById('admin-rank-score').value = '';
+                    document.getElementById('admin-rank-level').value = '';
+                    showAdminMessage('랭킹이 추가되었습니다!');
+                }
+            }
         }
 
-        // 페이지 로드 시 그리드 한번 생성
-        window.onload = createGrid;
+        function showAdminMessage(message) {
+            const adminMsg = document.createElement('div');
+            adminMsg.style.position = 'fixed';
+            adminMsg.style.top = '50%';
+            adminMsg.style.left = '50%';
+            adminMsg.style.transform = 'translate(-50%, -50%)';
+            adminMsg.style.background = 'rgba(0, 0, 0, 0.9)';
+            adminMsg.style.color = '#ffd700';
+            adminMsg.style.padding = '20px 40px';
+            adminMsg.style.borderRadius = '15px';
+            adminMsg.style.fontSize = '1.3rem';
+            adminMsg.style.fontWeight = 'bold';
+            adminMsg.style.zIndex = '11000';
+            adminMsg.style.border = '2px solid #ffd700';
+            adminMsg.textContent = message;
+            
+            document.body.appendChild(adminMsg);
+            
+            setTimeout(() => {
+                adminMsg.remove();
+            }, 1500);
+        }
+
+        document.getElementById('admin-password').addEventListener('keydown', (e) => {
+            e.stopPropagation();
+        });
+        
+        document.getElementById('admin-password').addEventListener('keypress', (e) => {
+            e.stopPropagation();
+            if (e.key === 'Enter') {
+                checkAdminPassword();
+            }
+        });
+
+        document.getElementById('nickname-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                setNickname();
+            }
+        });
+
+        function getRandomPiece() {
+            const rareChance = Math.random();
+            if (rareChance < 0.03) {
+                return RARE_POOP;
+            }
+            
+            const randomIndex = Math.floor(Math.random() * TETROMINOS.length);
+            return TETROMINOS[randomIndex];
+        }
+
+        function createNewPiece() {
+            if (nextPiece === null) {
+                nextPiece = getRandomPiece();
+            }
+
+            currentPiece = {
+                shape: nextPiece.map(row => [...row]),
+                x: Math.floor(BOARD_WIDTH / 2) - Math.floor(nextPiece[0].length / 2),
+                y: 0
+            };
+
+            nextPiece = getRandomPiece();
+            drawNextPiece();
+
+            hardDropUsed = false;
+            document.getElementById('drop-btn').disabled = false;
+            document.getElementById('drop-btn').style.opacity = '1';
+            document.getElementById('drop-btn').style.cursor = 'pointer';
+
+            if (collision()) {
+                gameOver();
+            }
+        }
+
+        function drawNextPiece() {
+            nextCtx.clearRect(0, 0, 120, 120);
+            
+            nextCtx.fillStyle = 'rgba(0,0,0,0.5)';
+            nextCtx.fillRect(0, 0, 120, 120);
+
+            if (!nextPiece) return;
+
+            const blockSize = 25;
+            const offsetX = (120 - nextPiece[0].length * blockSize) / 2;
+            const offsetY = (120 - nextPiece.length * blockSize) / 2;
+
+            for (let y = 0; y < nextPiece.length; y++) {
+                for (let x = 0; x < nextPiece[y].length; x++) {
+                    if (nextPiece[y][x] !== 0) {
+                        const drawX = offsetX + x * blockSize;
+                        const drawY = offsetY + y * blockSize;
+                        const blockType = nextPiece[y][x];
+                        const isRarePoop = blockType === 8;
+                        const isBomb = blockType === 9;
+                        
+                        if (isRarePoop) {
+                            const glowSize = 12 + Math.sin(glowAnimation) * 4;
+                            
+                            nextCtx.shadowColor = '#ffd700';
+                            nextCtx.shadowBlur = glowSize;
+                            
+                            nextCtx.font = 'bold 30px Arial';
+                            nextCtx.textAlign = 'center';
+                            nextCtx.textBaseline = 'middle';
+                            nextCtx.fillText('💩', 
+                                drawX + blockSize / 2, 
+                                drawY + blockSize / 2
+                            );
+                            
+                            nextCtx.shadowBlur = glowSize * 1.5;
+                            nextCtx.fillText('💩', 
+                                drawX + blockSize / 2, 
+                                drawY + blockSize / 2
+                            );
+                            
+                            nextCtx.shadowBlur = 0;
+                            nextCtx.shadowColor = 'transparent';
+                        } else if (isBomb) {
+                            const gradient = nextCtx.createLinearGradient(
+                                drawX, 
+                                drawY, 
+                                drawX, 
+                                drawY + blockSize
+                            );
+                            gradient.addColorStop(0, COLORS[9].start);
+                            gradient.addColorStop(1, COLORS[9].end);
+                            nextCtx.fillStyle = gradient;
+                            nextCtx.fillRect(drawX, drawY, blockSize, blockSize);
+                            
+                            nextCtx.strokeStyle = '#e74c3c';
+                            nextCtx.lineWidth = 2;
+                            nextCtx.strokeRect(drawX, drawY, blockSize, blockSize);
+                            
+                            nextCtx.font = 'bold 20px Arial';
+                            nextCtx.textAlign = 'center';
+                            nextCtx.textBaseline = 'middle';
+                            nextCtx.fillText('💣', 
+                                drawX + blockSize / 2, 
+                                drawY + blockSize / 2
+                            );
+                            
+                            nextCtx.lineWidth = 1;
+                        } else {
+                            const gradient = nextCtx.createLinearGradient(
+                                drawX, 
+                                drawY, 
+                                drawX, 
+                                drawY + blockSize
+                            );
+                            gradient.addColorStop(0, COLORS[blockType].start);
+                            gradient.addColorStop(1, COLORS[blockType].end);
+                            nextCtx.fillStyle = gradient;
+                            nextCtx.fillRect(drawX, drawY, blockSize, blockSize);
+                            
+                            nextCtx.strokeStyle = '#333';
+                            nextCtx.lineWidth = 2;
+                            nextCtx.strokeRect(drawX, drawY, blockSize, blockSize);
+                            
+                            nextCtx.font = 'bold 20px Arial';
+                            nextCtx.textAlign = 'center';
+                            nextCtx.textBaseline = 'middle';
+                            nextCtx.fillStyle = 'white';
+                            nextCtx.fillText('💩', 
+                                drawX + blockSize / 2, 
+                                drawY + blockSize / 2
+                            );
+                            
+                            nextCtx.lineWidth = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        function collision() {
+            for (let y = 0; y < currentPiece.shape.length; y++) {
+                for (let x = 0; x < currentPiece.shape[y].length; x++) {
+                    if (currentPiece.shape[y][x] !== 0) {
+                        const newX = currentPiece.x + x;
+                        const newY = currentPiece.y + y;
+
+                        if (newX < 0 || newX >= BOARD_WIDTH || 
+                            newY >= BOARD_HEIGHT || 
+                            (newY >= 0 && board[newY][newX] !== 0)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        function togglePause() {
+            if (!gameRunning) return;
+            
+            gamePaused = !gamePaused;
+            const pauseOverlay = document.getElementById('pause-overlay');
+            const pauseBtn = document.getElementById('pause-btn');
+            
+            if (gamePaused) {
+                pauseOverlay.classList.add('active');
+                pauseBtn.textContent = '▶️ 재생';
+            } else {
+                pauseOverlay.classList.remove('active');
+                pauseBtn.textContent = '⏸️ 정지';
+            }
+        }
+
+        function rotatePiece() {
+            if (!gameRunning || gamePaused) return;
+
+            const rotated = currentPiece.shape[0].map((_, index) =>
+                currentPiece.shape.map(row => row[index]).reverse()
+            );
+
+            const originalShape = currentPiece.shape;
+            currentPiece.shape = rotated;
+
+            if (collision()) {
+                currentPiece.shape = originalShape;
+            }
+        }
+
+        function movePiece(dx, dy) {
+            if (!gameRunning || gamePaused) return;
+
+            currentPiece.x += dx;
+            currentPiece.y += dy;
+
+            if (collision()) {
+                currentPiece.x -= dx;
+                currentPiece.y -= dy;
+
+                if (dy > 0) {
+                    placePiece();
+                    clearLines();
+                    createNewPiece();
+                }
+            }
+        }
+
+        function hardDrop() {
+            if (!gameRunning || gamePaused || hardDropUsed) return;
+
+            while (!collision()) {
+                currentPiece.y++;
+            }
+            currentPiece.y--;
+            
+            currentPiece.y -= 2;
+            
+            if (currentPiece.y < 0) {
+                currentPiece.y = 0;
+            }
+
+            hardDropUsed = true;
+            document.getElementById('drop-btn').disabled = true;
+            document.getElementById('drop-btn').style.opacity = '0.5';
+            document.getElementById('drop-btn').style.cursor = 'not-allowed';
+        }
+
+        function placePiece() {
+            let hasRarePoop = false;
+            let rarePoopX = 0;
+            let rarePoopY = 0;
+            let hasBomb = false;
+            let bombX = 0;
+            let bombY = 0;
+
+            for (let y = 0; y < currentPiece.shape.length; y++) {
+                for (let x = 0; x < currentPiece.shape[y].length; x++) {
+                    if (currentPiece.shape[y][x] !== 0) {
+                        const boardY = currentPiece.y + y;
+                        const boardX = currentPiece.x + x;
+                        if (boardY >= 0) {
+                            board[boardY][boardX] = currentPiece.shape[y][x];
+                            
+                            if (currentPiece.shape[y][x] === 8) {
+                                hasRarePoop = true;
+                                rarePoopX = boardX;
+                                rarePoopY = boardY;
+                            }
+                            
+                            if (currentPiece.shape[y][x] === 9) {
+                                hasBomb = true;
+                                bombX = boardX;
+                                bombY = boardY;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (hasBomb) {
+                explodeBomb(bombX, bombY);
+                bombActive = false;
+            }
+
+            if (hasRarePoop) {
+                if (rarePoopY === BOARD_HEIGHT - 1 || (rarePoopY < BOARD_HEIGHT - 1 && board[rarePoopY + 1][rarePoopX] !== 0)) {
+                    rarePoopPosition = { x: rarePoopX, y: rarePoopY };
+                    showCardSelection();
+                }
+            }
+        }
+
+        function explodeBomb(centerX, centerY) {
+            const explosionRadius = 3;
+            
+            for (let dy = -explosionRadius; dy <= explosionRadius; dy++) {
+                for (let dx = -explosionRadius; dx <= explosionRadius; dx++) {
+                    const x = centerX + dx;
+                    const y = centerY + dy;
+                    
+                    if (x >= 0 && x < BOARD_WIDTH && y >= 0 && y < BOARD_HEIGHT) {
+                        board[y][x] = 0;
+                    }
+                }
+            }
+            
+            applyGravityToBoard();
+        }
+
+        function createPoopExplosion(lineY) {
+            const gameBoard = document.getElementById('game-board');
+            
+            const explosionY = lineY * BLOCK_SIZE + BLOCK_SIZE / 2;
+            const explosionX = canvas.width / 2;
+            
+            const explosion = document.createElement('div');
+            explosion.className = 'poop-explosion';
+            explosion.textContent = '💩';
+            explosion.style.left = (10 + explosionX) + 'px';
+            explosion.style.top = (10 + explosionY) + 'px';
+            explosion.style.transform = 'translate(-50%, -50%)';
+            
+            gameBoard.appendChild(explosion);
+            
+            setTimeout(() => {
+                explosion.remove();
+            }, 600);
+        }
+
+        function clearLines() {
+            let linesCleared = 0;
+            let clearedLinePositions = [];
+            
+            for (let y = BOARD_HEIGHT - 1; y >= 0; y--) {
+                if (board[y].every(cell => cell !== 0)) {
+                    const lineBlocks = board[y].filter(cell => cell !== 0);
+                    const firstBlock = lineBlocks[0];
+                    const isSingleColor = lineBlocks.every(cell => cell === firstBlock);
+                    
+                    if (collectedPoops >= 6 && isSingleColor && !easterEgg2Used) {
+                        easterEgg2Used = true;
+                        skill1Count += 2;
+                        skill2Count += 2;
+                        skill3Count += 2;
+                        updateSkillBadges();
+                        showEasterEggMessage('✨ 히든 이��터에그! 🌈', '한 색깔 라인 클���어! 모든 스킬 2개씩 획득!');
+                    }
+                    
+                    clearedLinePositions.push(y);
+                    board.splice(y, 1);
+                    board.unshift(Array(BOARD_WIDTH).fill(0));
+                    linesCleared++;
+                    y++;
+                }
+            }
+
+            if (linesCleared > 0) {
+                clearedLinePositions.forEach(lineY => {
+                    createPoopExplosion(lineY);
+                });
+                
+                lines += linesCleared;
+                
+                const currentTime = Date.now();
+                const timeSinceLastClear = currentTime - lastClearTime;
+                
+                if (linesCleared >= 2) {
+                    comboCount = linesCleared;
+                    showComboMessage(comboCount);
+                    
+                    if (linesCleared === 2) {
+                        score += 250;
+                    } else if (linesCleared === 3) {
+                        score += 370;
+                    } else if (linesCleared === 4) {
+                        score += 490;
+                    } else {
+                        score += 490 + (linesCleared - 4) * 120;
+                    }
+                } else {
+                    comboCount = 0;
+                    score += 100;
+                }
+                
+                lastClearTime = currentTime;
+                
+                if (lines >= targetLines) {
+                    levelUp();
+                }
+                
+                updateScore();
+                updateMyPlayerStatus(true);
+            }
+        }
+
+        function showComboMessage(combo) {
+            const comboMessage = document.getElementById('combo-message');
+            const comboCountSpan = document.getElementById('combo-count');
+            
+            comboCountSpan.textContent = combo;
+            comboMessage.classList.add('active');
+            
+            setTimeout(() => {
+                comboMessage.classList.remove('active');
+            }, 2000);
+        }
+
+        function levelUp() {
+            level++;
+            
+            if (level >= 8 && (level - 8) % 6 === 0) {
+                keyCount++;
+                showKeyRewardMessage();
+            }
+            
+            targetLines = level * 5;
+            
+            board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
+            
+            slowMotionActive = false;
+            
+            gameRunning = false;
+            
+            showLevelUpMessage();
+            
+            setTimeout(() => {
+                hideLevelUpMessage();
+                gameRunning = true;
+                createNewPiece();
+            }, 2000);
+        }
+        
+        function showKeyRewardMessage() {
+            const keyMessage = document.createElement('div');
+            keyMessage.style.position = 'fixed';
+            keyMessage.style.top = '50%';
+            keyMessage.style.left = '50%';
+            keyMessage.style.transform = 'translate(-50%, -50%)';
+            keyMessage.style.background = 'linear-gradient(135deg, #ffd700 0%, #ff8c00 100%)';
+            keyMessage.style.color = 'white';
+            keyMessage.style.padding = '30px 50px';
+            keyMessage.style.borderRadius = '20px';
+            keyMessage.style.fontSize = '2rem';
+            keyMessage.style.fontWeight = 'bold';
+            keyMessage.style.zIndex = '5000';
+            keyMessage.style.border = '3px solid white';
+            keyMessage.style.boxShadow = '0 20px 60px rgba(0,0,0,0.5)';
+            keyMessage.style.textAlign = 'center';
+            keyMessage.innerHTML = '🔑 열쇠 획득!<br><span style="font-size: 1.2rem;">상점에서 사용할 수 있습니다</span>';
+            
+            document.body.appendChild(keyMessage);
+            
+            setTimeout(() => {
+                keyMessage.remove();
+            }, 2000);
+        }
+
+        function showLevelUpMessage() {
+            const levelUpDiv = document.getElementById('level-up-message');
+            const levelText = document.getElementById('level-up-text');
+            levelText.textContent = `레벨 ${level}`;
+            levelUpDiv.style.display = 'block';
+        }
+
+        function hideLevelUpMessage() {
+            document.getElementById('level-up-message').style.display = 'none';
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('level').textContent = level;
+            document.getElementById('keys').textContent = keyCount;
+            document.getElementById('lines').textContent = lines;
+            document.getElementById('target').textContent = targetLines;
+        }
+
+        function gameOver() {
+            gameRunning = false;
+            updateMyPlayerStatus(false);
+            showNameInput();
+        }
+
+        function getRank(playerScore) {
+            let rank = 1;
+            for (let ranking of rankings) {
+                if (playerScore <= ranking.score) {
+                    rank++;
+                }
+            }
+            return rank;
+        }
+
+        function showNameInput() {
+            const rank = getRank(score);
+            document.getElementById('rank-position').textContent = rank + '위';
+            document.getElementById('rank-score').textContent = score;
+            
+            const nameInputScreen = document.getElementById('name-input-screen');
+            const congratsMessage = nameInputScreen.querySelector('p');
+            
+            if (rank <= 5) {
+                congratsMessage.textContent = '축하합니다! TOP 5에 진입하셨습니다!';
+            } else {
+                congratsMessage.textContent = '게임이 끝났습니다! 이름을 입력하세요.';
+            }
+            
+            nameInputScreen.style.display = 'block';
+        }
+
+        function containsInappropriateWords(text) {
+            const badWords = [
+                '시발', '씨발', '씨벌', '씨팔', '개새', '개새끼', '개자식', '병신', '븅신', '빙신', '개년', 
+                '지���', 'ㅈㄹ', 'fuck', 'shit', '닥쳐', '꺼���', '���친', '바보',
+                '���놈', '미친', '��ㅊ', '���끼', 'ㅅㄲ', '년', '놈', '쓰레기',
+                '창녀', 'ㅊㄴ', '��레', 'ㄱㄹ', '느금', 'ㄴㄱ���'
+            ];
+            
+            const consonantPattern = /^[ㄱ-ㅎㅏ-ㅣ]{2,}$/;
+            
+            const lowerText = text.toLowerCase();
+            
+            for (let word of badWords) {
+                if (lowerText.includes(word.toLowerCase())) {
+                    return true;
+                }
+            }
+            
+            if (consonantPattern.test(text) && text.length >= 4) {
+                return true;
+            }
+            
+            return false;
+        }
+
+        async function saveScore() {
+            const playerName = document.getElementById('player-name').value.trim();
+            const saveStatus = document.getElementById('save-status');
+            const saveBtn = document.getElementById('save-btn');
+            const backBtn = document.getElementById('back-to-main-btn');
+            const retryBtn = document.getElementById('retry-btn');
+            
+            if (!playerName) {
+                saveStatus.textContent = '이름을 입력해주세요';
+                saveStatus.style.color = '#ff6b6b';
+                return;
+            }
+
+            if (containsInappropriateWords(playerName)) {
+                saveStatus.textContent = '⚠️ 부적절한 단어가 포함되어 있습니다';
+                saveStatus.style.color = '#ff6b6b';
+                return;
+            }
+
+            if (collectedPoops >= 6 && playerName === '승찬 잘생김' && !easterEgg1Used) {
+                easterEgg1Used = true;
+                skill1Count++;
+                skill2Count++;
+                skill3Count++;
+                updateSkillBadges();
+                showEasterEggMessage('✨ 이스터에그 발견! ✨', '모든 스킬을 1개씩 획득했습니다!');
+            }
+
+            saveStatus.textContent = '기록 저장 중...';
+            saveStatus.style.color = '#ccc';
+            saveBtn.disabled = true;
+            saveBtn.textContent = '저장 중...';
+
+            if (!sdkInitialized) {
+                await initializeSDK();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+
+            if (window.dataSdk) {
+                try {
+                    const result = await window.dataSdk.create({
+                        type: 'ranking',
+                        name: playerName,
+                        score: score,
+                        level: level.toString(),
+                        date: new Date().toISOString()
+                    });
+                    
+                    if (result.isOk) {
+                        saveStatus.textContent = '✅ 저장 완료!';
+                        saveStatus.style.color = '#4facfe';
+                        saveBtn.textContent = '저장 완료';
+                        
+                        setTimeout(() => {
+                            document.getElementById('name-input-screen').style.display = 'none';
+                            document.getElementById('player-name').value = '';
+                            saveStatus.textContent = '';
+                            saveStatus.style.color = '#ccc';
+                            saveBtn.disabled = false;
+                            saveBtn.textContent = '저장하기';
+                            saveBtn.style.display = 'inline-block';
+                            backBtn.style.display = 'none';
+                            retryBtn.style.display = 'none';
+                            showStartScreen();
+                        }, 1000);
+                    } else {
+                        saveStatus.textContent = '';
+                        saveBtn.style.display = 'none';
+                        backBtn.style.display = 'inline-block';
+                        retryBtn.style.display = 'inline-block';
+                        retryBtn.onclick = function() {
+                            saveStatus.textContent = '';
+                            saveBtn.style.display = 'inline-block';
+                            backBtn.style.display = 'none';
+                            retryBtn.style.display = 'none';
+                            saveBtn.disabled = false;
+                            saveBtn.textContent = '���장하기';
+                        };
+                    }
+                } catch (error) {
+                    saveStatus.textContent = '';
+                    saveBtn.style.display = 'none';
+                    backBtn.style.display = 'inline-block';
+                    retryBtn.style.display = 'inline-block';
+                    retryBtn.onclick = function() {
+                        saveStatus.textContent = '';
+                        saveBtn.style.display = 'inline-block';
+                        backBtn.style.display = 'none';
+                        retryBtn.style.display = 'none';
+                        saveBtn.disabled = false;
+                        saveBtn.textContent = '저장하기';
+                    };
+                }
+            }
+        }
+        
+        function backToMainFromSave() {
+            document.getElementById('name-input-screen').style.display = 'none';
+            document.getElementById('player-name').value = '';
+            document.getElementById('save-status').textContent = '';
+            document.getElementById('save-status').style.color = '#ccc';
+            document.getElementById('save-btn').disabled = false;
+            document.getElementById('save-btn').textContent = '저장하기';
+            document.getElementById('save-btn').style.display = 'inline-block';
+            document.getElementById('back-to-main-btn').style.display = 'none';
+            document.getElementById('retry-btn').style.display = 'none';
+            showStartScreen();
+        }
+
+        function collectSmallPoop(element) {
+            if (element.classList.contains('collected')) return;
+            
+            element.classList.add('collected');
+            collectedPoops++;
+            document.getElementById('collected-count').textContent = collectedPoops;
+            document.getElementById('poop-counter').classList.add('active');
+            
+            if (collectedPoops >= 6) {
+                document.getElementById('shop-button').style.display = 'block';
+                document.getElementById('hidden-quest-button').style.display = 'none';
+            }
+            
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 500);
+        }
+
+        function showHiddenQuest() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('hidden-quest-screen').style.display = 'flex';
+            
+            const text = '🤔 배경에서 큰 똥만 눈에 띄는 걸까요?\n작은 고추가 매운 만큼,\n작은 똥도 클릭하면 강한 법...!';
+            const textContainer = document.getElementById('hidden-quest-text');
+            
+            if (typingInterval) {
+                clearInterval(typingInterval);
+                typingInterval = null;
+            }
+            
+            if (hiddenQuestViewed) {
+                textContainer.textContent = text;
+                textContainer.style.whiteSpace = 'pre-line';
+                return;
+            }
+            
+            textContainer.textContent = '';
+            textContainer.style.whiteSpace = 'pre-line';
+            
+            let index = 0;
+            typingInterval = setInterval(() => {
+                if (index < text.length) {
+                    textContainer.textContent = text.substring(0, index + 1);
+                    index++;
+                } else {
+                    clearInterval(typingInterval);
+                    typingInterval = null;
+                    hiddenQuestViewed = true;
+                }
+            }, 100);
+        }
+
+        function showStartScreen() {
+            if (typingInterval) {
+                clearInterval(typingInterval);
+                typingInterval = null;
+            }
+            
+            document.getElementById('start-screen').style.display = 'flex';
+            document.getElementById('ranking-screen').style.display = 'none';
+            document.getElementById('shop-screen').style.display = 'none';
+            document.getElementById('hidden-quest-screen').style.display = 'none';
+            document.getElementById('game-container').style.display = 'none';
+            document.getElementById('game-over').style.display = 'none';
+            document.getElementById('name-input-screen').style.display = 'none';
+            
+            if (hiddenQuestViewed || collectedPoops > 0) {
+                document.getElementById('poop-counter').classList.add('active');
+            }
+        }
+
+        function showShop() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('shop-screen').style.display = 'flex';
+            document.getElementById('poop-counter').classList.remove('active');
+            updateShopDisplay();
+        }
+
+        function updateShopDisplay() {
+            document.getElementById('shop-keys').textContent = keyCount;
+            document.getElementById('skill1-count').textContent = skill1Count;
+            document.getElementById('skill2-count').textContent = skill2Count;
+            document.getElementById('skill3-count').textContent = skill3Count;
+        }
+
+        function buySkill(skillNum, keyCost) {
+            if (keyCount < keyCost) {
+                showShopError('열쇠가 부족합니다!');
+                return;
+            }
+
+            keyCount -= keyCost;
+            
+            if (skillNum === 1) {
+                skill1Count++;
+            } else if (skillNum === 2) {
+                skill2Count++;
+            } else if (skillNum === 3) {
+                skill3Count++;
+            }
+
+            updateShopDisplay();
+            updateSkillBadges();
+            updateScore();
+        }
+        
+        function showShopError(message) {
+            const saveStatus = document.createElement('div');
+            saveStatus.textContent = message;
+            saveStatus.style.color = '#ff6b6b';
+            saveStatus.style.fontSize = '1rem';
+            saveStatus.style.marginTop = '10px';
+            saveStatus.style.fontWeight = 'bold';
+            
+            const shopScreen = document.getElementById('shop-screen');
+            const existingStatus = shopScreen.querySelector('.insufficient-score-message');
+            if (existingStatus) {
+                existingStatus.remove();
+            }
+            
+            saveStatus.className = 'insufficient-score-message';
+            shopScreen.insertBefore(saveStatus, shopScreen.children[2]);
+            
+            setTimeout(() => {
+                saveStatus.remove();
+            }, 2000);
+        }
+
+        function showEasterEggMessage(title, message) {
+            const easterEggDiv = document.createElement('div');
+            easterEggDiv.style.position = 'fixed';
+            easterEggDiv.style.top = '50%';
+            easterEggDiv.style.left = '50%';
+            easterEggDiv.style.transform = 'translate(-50%, -50%)';
+            easterEggDiv.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            easterEggDiv.style.color = 'white';
+            easterEggDiv.style.padding = '40px 60px';
+            easterEggDiv.style.borderRadius = '20px';
+            easterEggDiv.style.fontSize = '1.8rem';
+            easterEggDiv.style.fontWeight = 'bold';
+            easterEggDiv.style.zIndex = '10000';
+            easterEggDiv.style.border = '3px solid #ffd700';
+            easterEggDiv.style.boxShadow = '0 0 50px rgba(255, 215, 0, 0.8)';
+            easterEggDiv.style.textAlign = 'center';
+            easterEggDiv.innerHTML = title + '<br><span style="font-size: 1.2rem;">' + message + '</span>';
+            
+            document.body.appendChild(easterEggDiv);
+            
+            setTimeout(() => {
+                easterEggDiv.remove();
+            }, 3000);
+        }
+
+        function updateSkillBadges() {
+            document.getElementById('skill1-badge').textContent = skill1Count;
+            document.getElementById('skill2-badge').textContent = skill2Count;
+            document.getElementById('skill3-badge').textContent = skill3Count;
+
+            document.getElementById('skill1-btn').disabled = skill1Count === 0;
+            document.getElementById('skill2-btn').disabled = skill2Count === 0;
+            document.getElementById('skill3-btn').disabled = skill3Count === 0;
+        }
+
+        function activateSkill(skillNum) {
+            if (activeSkill !== 0) return;
+
+            if (skillNum === 1 && skill1Count > 0) {
+                activeSkill = 1;
+                skill1Count--;
+                gameRunning = false;
+                gamePaused = true;
+                document.getElementById('line-delete-mode').classList.add('active');
+                document.getElementById('skill1-btn').classList.add('active');
+                lineDeleteClicks = [];
+                updateSkillBadges();
+                updateMyPlayerStatus(true);
+            } else if (skillNum === 2 && skill2Count > 0) {
+                activeSkill = 2;
+                skill2Count--;
+                bombActive = true;
+                convertCurrentPieceToBomb();
+                activeSkill = 0;
+                updateSkillBadges();
+                updateMyPlayerStatus(true);
+            } else if (skillNum === 3 && skill3Count > 0) {
+                activeSkill = 3;
+                skill3Count--;
+                slowMotionActive = true;
+                activeSkill = 0;
+                updateSkillBadges();
+                updateMyPlayerStatus(true);
+            }
+        }
+
+        function convertCurrentPieceToBomb() {
+            if (!currentPiece.shape) return;
+            
+            const bombShape = currentPiece.shape.map(row => [...row]);
+            
+            for (let y = 0; y < bombShape.length; y++) {
+                for (let x = 0; x < bombShape[y].length; x++) {
+                    if (bombShape[y][x] !== 0) {
+                        bombShape[y][x] = 9;
+                    }
+                }
+            }
+            
+            currentPiece.shape = bombShape;
+        }
+
+        function showRanking() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('ranking-screen').style.display = 'flex';
+            document.getElementById('poop-counter').classList.remove('active');
+            updateRankingDisplay();
+        }
+
+        function startGame() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('game-container').style.display = 'flex';
+            document.getElementById('poop-counter').classList.remove('active');
+            
+            if (collectedPoops >= 6) {
+                document.getElementById('skill-buttons').style.display = 'flex';
+                updateSkillBadges();
+            }
+            
+            resetGame();
+            gameRunning = true;
+            updateMyPlayerStatus(true);
+            createNewPiece();
+            gameLoop();
+        }
+
+        function updateRankingDisplay() {
+            const rankingList = document.getElementById('ranking-list');
+            if (rankings.length === 0) {
+                rankingList.innerHTML = '<div class="ranking-item"><span>아직 기록이 없습니다</span></div>';
+                return;
+            }
+
+            const allRankings = [...rankings].sort((a, b) => b.score - a.score);
+
+            rankingList.innerHTML = '';
+            allRankings.forEach((ranking, index) => {
+                const item = document.createElement('div');
+                item.className = 'ranking-item';
+                
+                if (index < 5) {
+                    item.classList.add('top-five');
+                }
+                
+                let rankDisplay;
+                if (index === 0) {
+                    rankDisplay = '🥇 1등';
+                } else if (index === 1) {
+                    rankDisplay = '🥈 2등';
+                } else if (index === 2) {
+                    rankDisplay = '🥉 3등';
+                } else if (index < 5) {
+                    rankDisplay = `💩 ${index + 1}등`;
+                } else {
+                    rankDisplay = `${index + 1}등`;
+                }
+                
+                item.innerHTML = `
+                    <span>${rankDisplay} ${ranking.name}</span>
+                    <span>${ranking.score}점 (Lv.${ranking.level})</span>
+                `;
+                rankingList.appendChild(item);
+            });
+        }
+
+        function restartGame() {
+            resetGame();
+            document.getElementById('game-over').style.display = 'none';
+            gameRunning = true;
+            updateMyPlayerStatus(true);
+            createNewPiece();
+        }
+
+        function resetGame() {
+            board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
+            score = 0;
+            level = 1;
+            lines = 0;
+            targetLines = 5;
+            dropTime = 0;
+            nextPiece = null;
+            gamePaused = false;
+            comboCount = 0;
+            lastClearTime = 0;
+            hardDropUsed = false;
+            activeSkill = 0;
+            slowMotionActive = false;
+            bombActive = false;
+            lineDeleteClicks = [];
+            document.getElementById('pause-overlay').classList.remove('active');
+            document.getElementById('pause-btn').textContent = '⏸️ 정지';
+            document.getElementById('drop-btn').disabled = false;
+            document.getElementById('drop-btn').style.opacity = '1';
+            document.getElementById('drop-btn').style.cursor = 'pointer';
+            document.getElementById('line-delete-mode').classList.remove('active');
+            document.getElementById('skill1-btn').classList.remove('active');
+            document.getElementById('skill2-btn').classList.remove('active');
+            document.getElementById('skill3-btn').classList.remove('active');
+            updateScore();
+        }
+
+        function draw() {
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = '#333333';
+            ctx.lineWidth = 1;
+            
+            for (let x = 0; x <= BOARD_WIDTH; x++) {
+                ctx.beginPath();
+                ctx.moveTo(x * BLOCK_SIZE, 0);
+                ctx.lineTo(x * BLOCK_SIZE, canvas.height);
+                ctx.stroke();
+            }
+            
+            for (let y = 0; y <= BOARD_HEIGHT; y++) {
+                ctx.beginPath();
+                ctx.moveTo(0, y * BLOCK_SIZE);
+                ctx.lineTo(canvas.width, y * BLOCK_SIZE);
+                ctx.stroke();
+            }
+
+            for (let y = 0; y < BOARD_HEIGHT; y++) {
+                for (let x = 0; x < BOARD_WIDTH; x++) {
+                    if (board[y][x] !== 0) {
+                        const blockType = board[y][x];
+                        const isRarePoop = blockType === 8;
+                        const isBomb = blockType === 9;
+                        
+                        if (isRarePoop) {
+                            const glowSize = 15 + Math.sin(glowAnimation) * 5;
+                            
+                            ctx.shadowColor = '#ffd700';
+                            ctx.shadowBlur = glowSize;
+                            
+                            ctx.font = 'bold 28px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText('💩', 
+                                x * BLOCK_SIZE + BLOCK_SIZE / 2, 
+                                y * BLOCK_SIZE + BLOCK_SIZE / 2
+                            );
+                            
+                            ctx.shadowBlur = glowSize * 1.5;
+                            ctx.fillText('💩', 
+                                x * BLOCK_SIZE + BLOCK_SIZE / 2, 
+                                y * BLOCK_SIZE + BLOCK_SIZE / 2
+                            );
+                            
+                            ctx.shadowBlur = 0;
+                            ctx.shadowColor = 'transparent';
+                        } else if (isBomb) {
+                            const gradient = ctx.createLinearGradient(
+                                x * BLOCK_SIZE, 
+                                y * BLOCK_SIZE, 
+                                x * BLOCK_SIZE, 
+                                y * BLOCK_SIZE + BLOCK_SIZE
+                            );
+                            gradient.addColorStop(0, COLORS[9].start);
+                            gradient.addColorStop(1, COLORS[9].end);
+                            ctx.fillStyle = gradient;
+                            ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                            
+                            ctx.strokeStyle = '#e74c3c';
+                            ctx.lineWidth = 2;
+                            ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                            
+                            ctx.font = 'bold 22px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText('����', 
+                                x * BLOCK_SIZE + BLOCK_SIZE / 2, 
+                                y * BLOCK_SIZE + BLOCK_SIZE / 2
+                            );
+                            
+                            ctx.lineWidth = 1;
+                        } else {
+                            const gradient = ctx.createLinearGradient(
+                                x * BLOCK_SIZE, 
+                                y * BLOCK_SIZE, 
+                                x * BLOCK_SIZE, 
+                                y * BLOCK_SIZE + BLOCK_SIZE
+                            );
+                            gradient.addColorStop(0, COLORS[blockType].start);
+                            gradient.addColorStop(1, COLORS[blockType].end);
+                            ctx.fillStyle = gradient;
+                            ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                            
+                            ctx.strokeStyle = '#333';
+                            ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                            
+                            ctx.font = '20px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText('💩', 
+                                x * BLOCK_SIZE + BLOCK_SIZE / 2, 
+                                y * BLOCK_SIZE + BLOCK_SIZE / 2
+                            );
+                        }
+                    }
+                }
+            }
+
+            if (currentPiece.shape) {
+                for (let y = 0; y < currentPiece.shape.length; y++) {
+                    for (let x = 0; x < currentPiece.shape[y].length; x++) {
+                        if (currentPiece.shape[y][x] !== 0) {
+                            const drawX = (currentPiece.x + x) * BLOCK_SIZE;
+                            const drawY = (currentPiece.y + y) * BLOCK_SIZE;
+                            const blockType = currentPiece.shape[y][x];
+                            const isRarePoop = blockType === 8;
+                            const isBomb = blockType === 9;
+                            
+                            if (isRarePoop) {
+                                const glowSize = 15 + Math.sin(glowAnimation) * 5;
+                                
+                                ctx.shadowColor = '#ffd700';
+                                ctx.shadowBlur = glowSize;
+                                
+                                ctx.font = 'bold 28px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle';
+                                ctx.fillText('💩', 
+                                    drawX + BLOCK_SIZE / 2, 
+                                    drawY + BLOCK_SIZE / 2
+                                );
+                                
+                                ctx.shadowBlur = glowSize * 1.5;
+                                ctx.fillText('💩', 
+                                    drawX + BLOCK_SIZE / 2, 
+                                    drawY + BLOCK_SIZE / 2
+                                );
+                                
+                                ctx.shadowBlur = 0;
+                                ctx.shadowColor = 'transparent';
+                            } else if (isBomb) {
+                                const gradient = ctx.createLinearGradient(
+                                    drawX, 
+                                    drawY, 
+                                    drawX, 
+                                    drawY + BLOCK_SIZE
+                                );
+                                gradient.addColorStop(0, COLORS[9].start);
+                                gradient.addColorStop(1, COLORS[9].end);
+                                ctx.fillStyle = gradient;
+                                ctx.fillRect(drawX, drawY, BLOCK_SIZE, BLOCK_SIZE);
+                                
+                                ctx.strokeStyle = '#e74c3c';
+                                ctx.lineWidth = 2;
+                                ctx.strokeRect(drawX, drawY, BLOCK_SIZE, BLOCK_SIZE);
+                                
+                                ctx.font = 'bold 22px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle';
+                                ctx.fillText('💣', 
+                                    drawX + BLOCK_SIZE / 2, 
+                                    drawY + BLOCK_SIZE / 2
+                                );
+                                
+                                ctx.lineWidth = 1;
+                            } else {
+                                const gradient = ctx.createLinearGradient(
+                                    drawX, 
+                                    drawY, 
+                                    drawX, 
+                                    drawY + BLOCK_SIZE
+                                );
+                                gradient.addColorStop(0, COLORS[blockType].start);
+                                gradient.addColorStop(1, COLORS[blockType].end);
+                                ctx.fillStyle = gradient;
+                                ctx.fillRect(drawX, drawY, BLOCK_SIZE, BLOCK_SIZE);
+                                
+                                ctx.strokeStyle = '#333';
+                                ctx.strokeRect(drawX, drawY, BLOCK_SIZE, BLOCK_SIZE);
+                                
+                                ctx.font = '20px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle';
+                                ctx.fillText('💩', 
+                                    drawX + BLOCK_SIZE / 2, 
+                                    drawY + BLOCK_SIZE / 2
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function getDropInterval(level) {
+            if (level === 1) return 1000;
+            if (level === 2) return 900;
+            if (level === 3) return 800;
+            if (level === 4) return 700;
+            if (level === 5) return 600;
+            if (level === 6) return 500;
+            if (level === 7) return 400;
+            if (level === 8) return 350;
+            if (level === 9) return 300;
+            if (level === 10) return 250;
+            if (level === 11) return 200;
+            if (level === 12) return 180;
+            if (level === 13) return 160;
+            if (level === 14) return 140;
+            if (level === 15) return 120;
+            if (level >= 16) {
+                return Math.max(80, 120 - (level - 15) * 2);
+            }
+        }
+
+        function gameLoop(time = 0) {
+            const deltaTime = time - lastTime;
+            lastTime = time;
+
+            glowAnimation += 0.1;
+
+            if (gameRunning && !gamePaused) {
+                dropTime += deltaTime;
+                const dropInterval = slowMotionActive ? 1000 : getDropInterval(level);
+
+                if (dropTime > dropInterval) {
+                    movePiece(0, 1);
+                    dropTime = 0;
+                }
+            }
+
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        document.getElementById('left-btn').addEventListener('click', () => movePiece(-1, 0));
+        document.getElementById('right-btn').addEventListener('click', () => movePiece(1, 0));
+        document.getElementById('rotate-btn').addEventListener('click', rotatePiece);
+        document.getElementById('down-btn').addEventListener('click', () => movePiece(0, 1));
+
+        document.addEventListener('keydown', (e) => {
+            if (!gameRunning) return;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    movePiece(-1, 0);
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    movePiece(1, 0);
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    movePiece(0, 1);
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    rotatePiece();
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    togglePause();
+                    break;
+                case 'Shift':
+                    e.preventDefault();
+                    if (!hardDropUsed) {
+                        hardDrop();
+                    }
+                    break;
+                case '1':
+                    e.preventDefault();
+                    if (skill1Count > 0 && activeSkill === 0) {
+                        activateSkill(1);
+                    }
+                    break;
+                case '2':
+                    e.preventDefault();
+                    if (skill2Count > 0 && activeSkill === 0) {
+                        activateSkill(2);
+                    }
+                    break;
+                case '3':
+                    e.preventDefault();
+                    if (skill3Count > 0 && activeSkill === 0) {
+                        activateSkill(3);
+                    }
+                    break;
+            }
+        });
+
+        document.getElementById('player-name').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                saveScore();
+            }
+        });
+
+        function showCardSelection() {
+            gameRunning = false;
+            document.getElementById('card-selection-overlay').classList.add('active');
+        }
+
+        function selectCard(side) {
+            document.getElementById('card-selection-overlay').classList.remove('active');
+            
+            const isExplosion = Math.random() < 0.5;
+            
+            if (isExplosion) {
+                showCardResult('💥', '���발!', '십자가에 포함된 모든 블록이 사라집니다!');
+                setTimeout(() => {
+                    explodeAroundRarePoop();
+                    closeCardResult();
+                    gameRunning = true;
+                }, 2000);
+            } else {
+                showCardResult('😇', '천사!', '블록을 추가/삭제할 수 있습니다!');
+                setTimeout(() => {
+                    closeCardResult();
+                    startEditMode();
+                }, 2000);
+            }
+        }
+
+        function showCardResult(icon, title, text) {
+            document.getElementById('card-result-icon').textContent = icon;
+            document.getElementById('card-result-text').innerHTML = `<strong>${title}</strong><br>${text}`;
+            document.getElementById('card-result').classList.add('active');
+        }
+
+        function closeCardResult() {
+            document.getElementById('card-result').classList.remove('active');
+        }
+
+        function createGoldenCross(centerX, centerY) {
+            const gameBoard = document.getElementById('game-board');
+            const canvasRect = canvas.getBoundingClientRect();
+            
+            const crossContainer = document.createElement('div');
+            crossContainer.className = 'golden-cross';
+            crossContainer.style.left = '10px';
+            crossContainer.style.top = '10px';
+            crossContainer.style.width = canvasRect.width + 'px';
+            crossContainer.style.height = canvasRect.height + 'px';
+            
+            const vertical = document.createElement('div');
+            vertical.className = 'golden-cross-vertical';
+            vertical.style.left = (centerX * BLOCK_SIZE + BLOCK_SIZE / 2) + 'px';
+            
+            const horizontal = document.createElement('div');
+            horizontal.className = 'golden-cross-horizontal';
+            horizontal.style.top = (centerY * BLOCK_SIZE + BLOCK_SIZE / 2) + 'px';
+            
+            crossContainer.appendChild(vertical);
+            crossContainer.appendChild(horizontal);
+            gameBoard.appendChild(crossContainer);
+            
+            setTimeout(() => {
+                crossContainer.remove();
+            }, 800);
+        }
+
+        function explodeAroundRarePoop() {
+            if (!rarePoopPosition) return;
+
+            const { x, y } = rarePoopPosition;
+            
+            createGoldenCross(x, y);
+            
+            const blocksToRemove = [];
+            
+            for (let dx = 0; dx < BOARD_WIDTH; dx++) {
+                if (board[y][dx] !== 0) {
+                    blocksToRemove.push({ x: dx, y: y });
+                }
+            }
+            
+            for (let dy = 0; dy < BOARD_HEIGHT; dy++) {
+                if (dy !== y && board[dy][x] !== 0) {
+                    blocksToRemove.push({ x: x, y: dy });
+                }
+            }
+            
+            setTimeout(() => {
+                for (let dx = 0; dx < BOARD_WIDTH; dx++) {
+                    board[y][dx] = 0;
+                }
+                for (let dy = 0; dy < BOARD_HEIGHT; dy++) {
+                    board[dy][x] = 0;
+                }
+                
+                applyGravityToBoard();
+                
+                rarePoopPosition = null;
+            }, 800);
+        }
+        
+        function applyGravityToBoard() {
+            for (let x = 0; x < BOARD_WIDTH; x++) {
+                for (let y = BOARD_HEIGHT - 2; y >= 0; y--) {
+                    if (board[y][x] !== 0) {
+                        const blockType = board[y][x];
+                        let fallDistance = 0;
+                        let checkY = y + 1;
+                        
+                        while (checkY < BOARD_HEIGHT && board[checkY][x] === 0) {
+                            fallDistance++;
+                            checkY++;
+                        }
+                        
+                        if (fallDistance > 0) {
+                            board[y + fallDistance][x] = blockType;
+                            board[y][x] = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        function startEditMode() {
+            editMode = true;
+            editCount = 5;
+            document.getElementById('block-edit-mode').classList.add('active');
+            document.getElementById('edit-count').textContent = editCount;
+            gameRunning = false;
+        }
+
+        function endEditMode() {
+            editMode = false;
+            editCount = 0;
+            document.getElementById('block-edit-mode').classList.remove('active');
+            rarePoopPosition = null;
+            clearLines();
+            gameRunning = true;
+        }
+
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.floor((e.clientX - rect.left) / BLOCK_SIZE);
+            const y = Math.floor((e.clientY - rect.top) / BLOCK_SIZE);
+
+            if (activeSkill === 1) {
+                handleLineDeleteClick(x, y);
+                return;
+            }
+
+            if (!editMode) return;
+
+            if (x >= 0 && x < BOARD_WIDTH && y >= 0 && y < BOARD_HEIGHT) {
+                if (board[y][x] === 0) {
+                    if (y === BOARD_HEIGHT - 1 || board[y + 1][x] !== 0) {
+                        board[y][x] = Math.floor(Math.random() * 7) + 1;
+                    } else {
+                        return;
+                    }
+                } else {
+                    board[y][x] = 0;
+                    
+                    applyGravity(x);
+                }
+
+                editCount--;
+                document.getElementById('edit-count').textContent = editCount;
+
+                if (editCount <= 0) {
+                    endEditMode();
+                } else {
+                    clearLines();
+                }
+            }
+        });
+
+        function handleLineDeleteClick(x, y) {
+            if (x < 0 || x >= BOARD_WIDTH || y < 0 || y >= BOARD_HEIGHT) return;
+
+            lineDeleteClicks.push({ x, y });
+
+            if (lineDeleteClicks.length === 2) {
+                const click1 = lineDeleteClicks[0];
+                const click2 = lineDeleteClicks[1];
+
+                if (click1.y === click2.y) {
+                    showLineDeleteEffect('horizontal', click1.y);
+                    setTimeout(() => {
+                        for (let i = 0; i < BOARD_WIDTH; i++) {
+                            board[click1.y][i] = 0;
+                        }
+                        applyGravityToBoard();
+                    }, 500);
+                } else if (click1.x === click2.x) {
+                    showLineDeleteEffect('vertical', click1.x);
+                    setTimeout(() => {
+                        for (let i = 0; i < BOARD_HEIGHT; i++) {
+                            board[i][click1.x] = 0;
+                        }
+                        applyGravityToBoard();
+                    }, 500);
+                }
+
+                activeSkill = 0;
+                lineDeleteClicks = [];
+                document.getElementById('line-delete-mode').classList.remove('active');
+                document.getElementById('skill1-btn').classList.remove('active');
+                
+                setTimeout(() => {
+                    gameRunning = true;
+                    gamePaused = false;
+                }, 500);
+            }
+        }
+        
+        function showLineDeleteEffect(direction, position) {
+            const gameBoard = document.getElementById('game-board');
+            const canvasRect = canvas.getBoundingClientRect();
+            
+            const lineEffect = document.createElement('div');
+            lineEffect.style.position = 'absolute';
+            lineEffect.style.pointerEvents = 'none';
+            lineEffect.style.zIndex = '300';
+            
+            if (direction === 'horizontal') {
+                lineEffect.style.left = '10px';
+                lineEffect.style.top = (10 + position * BLOCK_SIZE) + 'px';
+                lineEffect.style.width = canvasRect.width + 'px';
+                lineEffect.style.height = BLOCK_SIZE + 'px';
+                lineEffect.style.background = 'linear-gradient(180deg, transparent 0%, rgba(255, 215, 0, 0.3) 20%, rgba(255, 215, 0, 1) 50%, rgba(255, 215, 0, 0.3) 80%, transparent 100%)';
+            } else {
+                lineEffect.style.left = (10 + position * BLOCK_SIZE) + 'px';
+                lineEffect.style.top = '10px';
+                lineEffect.style.width = BLOCK_SIZE + 'px';
+                lineEffect.style.height = canvasRect.height + 'px';
+                lineEffect.style.background = 'linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.3) 20%, rgba(255, 215, 0, 1) 50%, rgba(255, 215, 0, 0.3) 80%, transparent 100%)';
+            }
+            
+            lineEffect.style.boxShadow = '0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.6)';
+            lineEffect.style.animation = 'lineGlow 0.5s ease-in-out';
+            
+            gameBoard.appendChild(lineEffect);
+            
+            setTimeout(() => {
+                lineEffect.remove();
+            }, 500);
+        }
+        
+        function applyGravity(columnX) {
+            const column = [];
+            for (let y = 0; y < BOARD_HEIGHT; y++) {
+                if (board[y][columnX] !== 0) {
+                    column.push(board[y][columnX]);
+                }
+            }
+            
+            for (let y = 0; y < BOARD_HEIGHT; y++) {
+                board[y][columnX] = 0;
+            }
+            
+            let startY = BOARD_HEIGHT - column.length;
+            for (let i = 0; i < column.length; i++) {
+                board[startY + i][columnX] = column[i];
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeSDK();
+        });
     </script>
-</body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a7bdcc4f18bc444',t:'MTc2NDY4OTM5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
